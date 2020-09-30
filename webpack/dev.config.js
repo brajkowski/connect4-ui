@@ -30,7 +30,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Phaser + Ts + Webpack',
+      title: 'Connect 4',
       template: './src/index.html',
     }),
   ],
