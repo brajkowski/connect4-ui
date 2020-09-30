@@ -31,4 +31,22 @@ function create(this: Scene) {
   this.input.on('pointerdown', () => {
     music.play();
   });
+  const score1 = this.make.text({
+    x: 165,
+    y: 525,
+    text: '0',
+    style: {
+      font: '30px "Arial"',
+      color: 'white',
+    },
+  });
+  const score2 = this.make.text({
+    x: 445,
+    y: 525,
+    text: '0',
+    style: {
+      font: '30px "Arial"',
+      color: 'white',
+    },
+  });
 }
