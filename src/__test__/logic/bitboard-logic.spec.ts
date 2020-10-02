@@ -4,19 +4,21 @@ import { FullColumnError } from '../../logic/full-column-error';
 import { Player } from '../../logic/logic';
 import { Constants } from '../../util/constants';
 
-let logic: BitboardLogic;
+const logic = new BitboardLogic();
 const p1 = Player.One;
 const p2 = Player.Two;
+const refreshLogic = () => logic.clear();
 
 describe('bitboard-logic', () => {
   beforeEach(() => {
-    logic = new BitboardLogic();
+    refreshLogic();
   });
 
   it('Player affects their own game state', () => {
     function test(player: Player) {
       logic.placeChip(player, 0);
       expect(logic.getPlayerState(player).getRawState()).toBeGreaterThan(0);
+      refreshLogic();
     }
     test(p1);
     test(p2);
@@ -27,6 +29,7 @@ describe('bitboard-logic', () => {
       logic.placeChip(p1, 0);
       const actual = logic.getPlayerState(p2).getRawState();
       expect(actual).toBe(0);
+      refreshLogic();
     }
     test(p1, p2);
     test(p2, p1);
@@ -41,6 +44,7 @@ describe('bitboard-logic', () => {
       players.forEach((p) => logic.placeChip(p, column));
       const gameState = new BitboardPlayerState(logic.getGameState());
       expect(gameState.occupiesPosition(endingRowIndex, column)).toBe(true);
+      refreshLogic();
     }
     test(0, 4, p1, p2);
     test(4, 2, p1, p2, p2, p1);
@@ -54,6 +58,7 @@ describe('bitboard-logic', () => {
       }
       const actual = logic.canPlaceChip(column);
       expect(actual).toBe(expected);
+      refreshLogic();
     }
     test(0, 0, true);
     test(0, 6, false);
@@ -73,6 +78,7 @@ describe('bitboard-logic', () => {
       const playerToWin = players[players.length - 1];
       players.forEach((p) => logic.placeChip(p, column));
       expect(logic.didWin(playerToWin));
+      refreshLogic();
     }
     test(0, p2, p2, p1, p1, p1, p1);
     test(0, p1, p1, p1, p1);
