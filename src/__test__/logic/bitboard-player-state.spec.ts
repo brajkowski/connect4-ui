@@ -1,4 +1,5 @@
 import { BitboardPlayerState } from '../../logic/bitboard-player-state';
+import { PositionAlreadyOccupiedError } from '../../logic/position-already-occupied-error';
 import { Constants } from '../../util/constants';
 
 describe('player-state', () => {
@@ -40,13 +41,15 @@ describe('player-state', () => {
 
   it('Throws error when attempting to occupy already occupied position', () => {
     const player = new BitboardPlayerState(0x1);
-    expect(() => player.occupyPosition(0, 0)).toThrowError();
+    expect(() => player.occupyPosition(0, 0)).toThrow(
+      PositionAlreadyOccupiedError
+    );
   });
 
   it('Throws error when attempting to occupy out of bounds position', () => {
     function test(row: number, column: number) {
       const player = new BitboardPlayerState();
-      expect(() => player.occupyPosition(row, column)).toThrowError();
+      expect(() => player.occupyPosition(row, column)).toThrow(RangeError);
     }
     test(Number.MAX_VALUE, 0);
     test(0, Number.MAX_VALUE);
@@ -77,7 +80,7 @@ describe('player-state', () => {
   it('Throws error when attempting to check out of bounds position', () => {
     function test(row: number, column: number) {
       const player = new BitboardPlayerState();
-      expect(() => player.occupiesPosition(row, column)).toThrowError();
+      expect(() => player.occupiesPosition(row, column)).toThrow(RangeError);
     }
     test(Number.MAX_VALUE, 0);
     test(0, Number.MAX_VALUE);
