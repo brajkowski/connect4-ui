@@ -1,8 +1,8 @@
+import { BitboardPlayerState } from './bitboard-player-state';
 import { Logic, Player } from './logic';
-import { PlayerState } from './player-state';
 
 export class BitboardLogic implements Logic {
-  getPlayerState(player: Player): PlayerState {
+  getPlayerState(player: Player): BitboardPlayerState {
     throw new Error('Method not implemented.');
   }
   placeChip(player: Player, column: number): number {
