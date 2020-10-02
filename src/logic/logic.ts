@@ -1,0 +1,14 @@
+import { PlayerState } from './player-state';
+
+export interface Logic {
+  getPlayerState(player: Player): PlayerState;
+  placeChip(player: Player, column: number): number;
+  didWin(player: Player): boolean;
+  canPlaceChip(column: number): boolean;
+  clear(): void;
+}
+
+export enum Player {
+  One,
+  Two,
+}
