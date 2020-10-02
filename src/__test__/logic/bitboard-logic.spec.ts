@@ -1,0 +1,3 @@
+describe('bitboard-logic', () => {
+  it('', () => {});
+});
