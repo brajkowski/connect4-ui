@@ -2,7 +2,7 @@ import { BitboardPlayerState } from '../../logic/bitboard-player-state';
 import { PositionAlreadyOccupiedError } from '../../logic/position-already-occupied-error';
 import { Constants } from '../../util/constants';
 
-describe('player-state', () => {
+describe('bitboard-player-state', () => {
   it('Default constructor provides an empty initialized player state', () => {
     const expected = 0x0;
     const actual = new BitboardPlayerState().getRawState();
