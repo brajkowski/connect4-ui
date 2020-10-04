@@ -3,11 +3,11 @@ import { PlayerState } from './player-state';
 import { PositionAlreadyOccupiedError } from './position-already-occupied-error';
 
 export class BitboardPlayerState implements PlayerState {
-  private state: number;
+  private state: bigint;
 
   constructor();
-  constructor(state: number);
-  constructor(state?: number) {
+  constructor(state: bigint);
+  constructor(state?: bigint) {
     this.clearAllPositions();
     if (state != null) {
       this.state = state;
@@ -15,16 +15,16 @@ export class BitboardPlayerState implements PlayerState {
   }
 
   clearAllPositions(): void {
-    this.state = 0;
+    this.state = BigInt(0x0);
   }
 
   occupiesPosition(row: number, column: number): boolean {
-    const mask = 1 << this.getShift(row, column);
+    const mask = BigInt(0x1) << this.getShift(row, column);
     return this.occupiesPositionByMask(mask);
   }
 
   occupyPosition(row: number, column: number): void {
-    const mask = 1 << this.getShift(row, column);
+    const mask = BigInt(0x1) << this.getShift(row, column);
     if (this.occupiesPositionByMask(mask)) {
       const message = `"Row ${row} column ${column} is already occupied"`;
       throw new PositionAlreadyOccupiedError(message);
@@ -32,17 +32,17 @@ export class BitboardPlayerState implements PlayerState {
     this.state = this.state | mask;
   }
 
-  getRawState(): number {
+  getRawState(): bigint {
     return this.state;
   }
 
-  private occupiesPositionByMask(mask: number): boolean {
-    return (this.state & mask) != 0;
+  private occupiesPositionByMask(mask: bigint): boolean {
+    return (this.state & mask) != BigInt(0x0);
   }
 
-  private getShift(row: number, column: number): number {
+  private getShift(row: number, column: number): bigint {
     this.boundsCheck(row, column);
-    return Constants.columns * row + column;
+    return BigInt(Constants.columns * row + column);
   }
 
   private boundsCheck(row: number, column: number) {
