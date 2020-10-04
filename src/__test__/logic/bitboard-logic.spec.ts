@@ -28,7 +28,7 @@ describe('bitboard-logic', () => {
     function test(p1: Player, p2: Player) {
       logic.placeChip(p1, 0);
       const actual = logic.getPlayerState(p2).getRawState();
-      expect(actual).toBe(0);
+      expect(actual === BigInt(0)).toBe(true);
       refreshLogic();
     }
     test(p1, p2);

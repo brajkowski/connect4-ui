@@ -36,7 +36,7 @@ export class BitboardLogic implements Logic {
     this.p1.clearAllPositions();
     this.p2.clearAllPositions();
   }
-  getGameState(): number {
+  getGameState(): bigint {
     return this.p1.getRawState() | this.p2.getRawState();
   }
   private findHighestIndexRow(column: number): number {
@@ -47,19 +47,19 @@ export class BitboardLogic implements Logic {
     if (!state.occupiesPosition(0, column)) return 0;
     throw new FullColumnError(`Column ${column} is full`);
   }
-  private checkVerticalWin(state: number): boolean {
-    const verticalMask = 0x204081;
+  private checkVerticalWin(state: bigint): boolean {
+    const verticalMask = BigInt(0x204081);
     for (let i = 0; i < 21; i++) {
-      const shiftedMask = verticalMask << i;
+      const shiftedMask = verticalMask << BigInt(i);
       if ((state & shiftedMask) === shiftedMask) return true;
     }
     return false;
   }
-  private checkHorizontalWin(state: number): boolean {
-    const horizontalMask = 0xf;
+  private checkHorizontalWin(state: bigint): boolean {
+    const horizontalMask = BigInt(0xf);
     for (let row = 0; row < Constants.rows; row++) {
       for (let column = 0; column < 4; column++) {
-        const shift = 7 * row + column;
+        const shift = BigInt(7 * row + column);
         const shiftedMask = horizontalMask << shift;
         if ((state & shiftedMask) === shiftedMask) {
           return true;
@@ -68,12 +68,12 @@ export class BitboardLogic implements Logic {
     }
     return false;
   }
-  private checkDiagonalWin(state: number): boolean {
-    const diagonalType1Mask = 0x208208;
-    const diagonalType2Mask = 0x1010101;
+  private checkDiagonalWin(state: bigint): boolean {
+    const diagonalType1Mask = BigInt(0x208208);
+    const diagonalType2Mask = BigInt(0x1010101);
     for (let row = 0; row < 3; row++) {
       for (let column = 0; column < 4; column++) {
-        const shift = 7 * row + column;
+        const shift = BigInt(7 * row + column);
         const shiftedType1Mask = diagonalType1Mask << shift;
         const shiftedType2Mask = diagonalType2Mask << shift;
         if ((state & shiftedType1Mask) === shiftedType1Mask) return true;
