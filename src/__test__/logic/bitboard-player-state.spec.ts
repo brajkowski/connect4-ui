@@ -55,6 +55,8 @@ describe('bitboard-player-state', () => {
     test(0, Number.MAX_VALUE);
     test(Constants.maxRowIndex + 1, Constants.maxColumnIndex);
     test(Constants.maxRowIndex, Constants.maxColumnIndex + 1);
+    test(-1, 0);
+    test(0, -1);
   });
 
   it('Correctly reports if position is occupied', () => {

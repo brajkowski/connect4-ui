@@ -48,6 +48,7 @@ export class BitboardPlayerState implements PlayerState {
   private boundsCheck(row: number, column: number) {
     if (row < 0 || column < 0) {
       const message = `Expected row to be > 0 but was ${row} and column to be > 0 but was ${column}`;
+      throw new RangeError(message);
     }
     if (row > Constants.maxRowIndex || column > Constants.maxColumnIndex) {
       const message = `Expected row to be <= ${Constants.maxRowIndex} but was ${row} and column to be <= ${Constants.maxColumnIndex} but was ${column}`;
