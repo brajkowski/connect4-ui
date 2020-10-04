@@ -77,7 +77,7 @@ describe('bitboard-logic', () => {
     function test(column: number, ...players: Player[]) {
       const playerToWin = players[players.length - 1];
       players.forEach((p) => logic.placeChip(p, column));
-      expect(logic.didWin(playerToWin));
+      expect(logic.didWin(playerToWin)).toBe(true);
       refreshLogic();
     }
     test(0, p2, p2, p1, p1, p1, p1);
@@ -91,7 +91,7 @@ describe('bitboard-logic', () => {
     logic.placeChip(p1, 1);
     logic.placeChip(p1, 2);
     logic.placeChip(p1, 3);
-    expect(logic.didWin(p1));
+    expect(logic.didWin(p1)).toBe(true);
   });
 
   it('Detects diagonal win (type 1)', () => {
