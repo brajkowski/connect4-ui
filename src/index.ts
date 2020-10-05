@@ -8,6 +8,9 @@ const config: Types.Core.GameConfig = {
   width: 600,
   height: 600,
   scene: scene,
+  scale: {
+    mode: Phaser.Scale.FIT,
+  },
 };
 
 const game = new Game(config);
