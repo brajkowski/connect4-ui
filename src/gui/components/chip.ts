@@ -48,6 +48,10 @@ export class Chip {
     };
   }
 
+  destroy() {
+    this.sprite.destroy(false);
+  }
+
   update() {
     if (!this.hasRested) {
       this.fallingAnimation();
