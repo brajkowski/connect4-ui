@@ -1,3 +1,4 @@
+import bigInt = require('big-integer');
 import { Constants } from '../util/constants';
 import { BitboardPlayerState } from './bitboard-player-state';
 import { FullColumnError } from './full-column-error';
@@ -36,8 +37,8 @@ export class BitboardLogic implements Logic {
     this.p1.clearAllPositions();
     this.p2.clearAllPositions();
   }
-  getGameState(): bigint {
-    return this.p1.getRawState() | this.p2.getRawState();
+  getGameState(): bigInt.BigInteger {
+    return this.p1.getRawState().or(this.p2.getRawState());
   }
   private findHighestIndexRow(column: number): number {
     const state = new BitboardPlayerState(this.getGameState());
@@ -47,37 +48,37 @@ export class BitboardLogic implements Logic {
     if (!state.occupiesPosition(0, column)) return 0;
     throw new FullColumnError(`Column ${column} is full`);
   }
-  private checkVerticalWin(state: bigint): boolean {
-    const verticalMask = BigInt(0x204081);
+  private checkVerticalWin(state: bigInt.BigInteger): boolean {
+    const verticalMask = bigInt(0x204081);
     for (let i = 0; i < 21; i++) {
-      const shiftedMask = verticalMask << BigInt(i);
-      if ((state & shiftedMask) === shiftedMask) return true;
+      const shiftedMask = verticalMask.shiftLeft(bigInt(i));
+      if (state.and(shiftedMask).eq(shiftedMask)) return true;
     }
     return false;
   }
-  private checkHorizontalWin(state: bigint): boolean {
-    const horizontalMask = BigInt(0xf);
+  private checkHorizontalWin(state: bigInt.BigInteger): boolean {
+    const horizontalMask = bigInt(0xf);
     for (let row = 0; row < Constants.rows; row++) {
       for (let column = 0; column < 4; column++) {
-        const shift = BigInt(7 * row + column);
-        const shiftedMask = horizontalMask << shift;
-        if ((state & shiftedMask) === shiftedMask) {
+        const shift = bigInt(7 * row + column);
+        const shiftedMask = horizontalMask.shiftLeft(shift);
+        if (state.and(shiftedMask).eq(shiftedMask)) {
           return true;
         }
       }
     }
     return false;
   }
-  private checkDiagonalWin(state: bigint): boolean {
-    const diagonalType1Mask = BigInt(0x208208);
-    const diagonalType2Mask = BigInt(0x1010101);
+  private checkDiagonalWin(state: bigInt.BigInteger): boolean {
+    const diagonalType1Mask = bigInt(0x208208);
+    const diagonalType2Mask = bigInt(0x1010101);
     for (let row = 0; row < 3; row++) {
       for (let column = 0; column < 4; column++) {
-        const shift = BigInt(7 * row + column);
-        const shiftedType1Mask = diagonalType1Mask << shift;
-        const shiftedType2Mask = diagonalType2Mask << shift;
-        if ((state & shiftedType1Mask) === shiftedType1Mask) return true;
-        if ((state & shiftedType2Mask) === shiftedType2Mask) return true;
+        const shift = bigInt(7 * row + column);
+        const shiftedType1Mask = diagonalType1Mask.shiftLeft(shift);
+        const shiftedType2Mask = diagonalType2Mask.shiftLeft(shift);
+        if (state.and(shiftedType1Mask).eq(shiftedType1Mask)) return true;
+        if (state.and(shiftedType2Mask).eq(shiftedType2Mask)) return true;
       }
     }
     return false;

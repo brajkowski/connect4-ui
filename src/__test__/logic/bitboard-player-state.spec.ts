@@ -1,33 +1,34 @@
+import bigInt = require('big-integer');
 import { BitboardPlayerState } from '../../logic/bitboard-player-state';
 import { PositionAlreadyOccupiedError } from '../../logic/position-already-occupied-error';
 import { Constants } from '../../util/constants';
 
 describe('bitboard-player-state', () => {
   it('Default constructor provides an empty initialized player state', () => {
-    const expected = BigInt(0x0);
+    const expected = bigInt(0x0);
     const actual = new BitboardPlayerState().getRawState();
-    expect(actual === expected).toBe(true);
+    expect(actual.eq(expected)).toBe(true);
   });
 
   it('State constructor initializes object with the supplied state', () => {
-    const expected = BigInt(0x1) << BigInt(5);
+    const expected = bigInt(0x1).shiftLeft(bigInt(5));
     const actual = new BitboardPlayerState(expected).getRawState();
     expect(actual === expected).toBe(true);
   });
 
   it('Can occupy single valid positions', () => {
-    function test(row: number, column: number, expected: bigint) {
+    function test(row: number, column: number, expected: bigInt.BigInteger) {
       const player = new BitboardPlayerState();
       player.occupyPosition(row, column);
       const actual = player.getRawState();
-      expect(actual === expected).toBe(true);
+      expect(actual.eq(expected)).toBe(true);
     }
-    test(0, 0, BigInt(1));
-    test(3, 5, BigInt(1) << BigInt(26));
+    test(0, 0, bigInt(1));
+    test(3, 5, bigInt(1).shiftLeft(bigInt(26)));
     test(
       Constants.maxRowIndex,
       Constants.maxColumnIndex,
-      BigInt(1) << BigInt(41)
+      bigInt(1).shiftLeft(bigInt(41))
     );
   });
 
@@ -38,13 +39,13 @@ describe('bitboard-player-state', () => {
     player.occupyPosition(0, 2);
     player.occupyPosition(0, 3);
 
-    const expected = BigInt(0xf);
+    const expected = bigInt(0xf);
     const actual = player.getRawState();
-    expect(actual === expected).toBe(true);
+    expect(actual.eq(expected)).toBe(true);
   });
 
   it('Throws error when attempting to occupy already occupied position', () => {
-    const player = new BitboardPlayerState(BigInt(0x1));
+    const player = new BitboardPlayerState(bigInt(0x1));
     expect(() => player.occupyPosition(0, 0)).toThrow(
       PositionAlreadyOccupiedError
     );
@@ -64,30 +65,30 @@ describe('bitboard-player-state', () => {
   });
 
   it('Correctly reports if position is occupied', () => {
-    function test(row: number, column: number, state: bigint) {
+    function test(row: number, column: number, state: bigInt.BigInteger) {
       const player = new BitboardPlayerState(state);
       expect(player.occupiesPosition(row, column)).toBe(true);
     }
-    test(0, 0, BigInt(1));
-    test(3, 5, BigInt(1) << BigInt(26));
+    test(0, 0, bigInt(1));
+    test(3, 5, bigInt(1).shiftLeft(bigInt(26)));
     test(
       Constants.maxRowIndex,
       Constants.maxColumnIndex,
-      BigInt(1) << BigInt(41)
+      bigInt(1).shiftLeft(bigInt(41))
     );
   });
 
   it('Correctly reports if position is not occupied', () => {
-    function test(row: number, column: number, state: bigint) {
+    function test(row: number, column: number, state: bigInt.BigInteger) {
       const player = new BitboardPlayerState(state);
       expect(player.occupiesPosition(row, column)).toBe(false);
     }
-    test(0, 0, BigInt(1) << BigInt(1));
-    test(3, 5, BigInt(1) << BigInt(25));
+    test(0, 0, bigInt(1).shiftLeft(bigInt(1)));
+    test(3, 5, bigInt(1).shiftLeft(bigInt(25)));
     test(
       Constants.maxRowIndex,
       Constants.maxColumnIndex,
-      BigInt(1) << BigInt(40)
+      bigInt(1).shiftLeft(bigInt(40))
     );
   });
 

@@ -40,6 +40,7 @@
     "webpack-merge": "^5.1.4"
   },
   "dependencies": {
+    "big-integer": "^1.6.48",
     "express": "^4.17.1"
   }
 }

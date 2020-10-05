@@ -1,3 +1,4 @@
+import bigInt = require('big-integer');
 import { BitboardLogic } from '../../logic/bitboard-logic';
 import { BitboardPlayerState } from '../../logic/bitboard-player-state';
 import { FullColumnError } from '../../logic/full-column-error';
@@ -17,7 +18,9 @@ describe('bitboard-logic', () => {
   it('Player affects their own game state', () => {
     function test(player: Player) {
       logic.placeChip(player, 0);
-      expect(logic.getPlayerState(player).getRawState()).toBeGreaterThan(0);
+      expect(
+        logic.getPlayerState(player).getRawState().greater(bigInt(0))
+      ).toBe(true);
       refreshLogic();
     }
     test(p1);
@@ -28,7 +31,7 @@ describe('bitboard-logic', () => {
     function test(p1: Player, p2: Player) {
       logic.placeChip(p1, 0);
       const actual = logic.getPlayerState(p2).getRawState();
-      expect(actual === BigInt(0)).toBe(true);
+      expect(actual.eq(bigInt(0))).toBe(true);
       refreshLogic();
     }
     test(p1, p2);

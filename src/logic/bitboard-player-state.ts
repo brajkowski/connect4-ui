@@ -1,13 +1,14 @@
+import bigInt = require('big-integer');
 import { Constants } from '../util/constants';
 import { PlayerState } from './player-state';
 import { PositionAlreadyOccupiedError } from './position-already-occupied-error';
 
 export class BitboardPlayerState implements PlayerState {
-  private state: bigint;
+  private state: bigInt.BigInteger;
 
   constructor();
-  constructor(state: bigint);
-  constructor(state?: bigint) {
+  constructor(state: bigInt.BigInteger);
+  constructor(state?: bigInt.BigInteger) {
     this.clearAllPositions();
     if (state != null) {
       this.state = state;
@@ -15,34 +16,34 @@ export class BitboardPlayerState implements PlayerState {
   }
 
   clearAllPositions(): void {
-    this.state = BigInt(0x0);
+    this.state = bigInt(0x0);
   }
 
   occupiesPosition(row: number, column: number): boolean {
-    const mask = BigInt(0x1) << this.getShift(row, column);
+    const mask = bigInt(0x1).shiftLeft(this.getShift(row, column));
     return this.occupiesPositionByMask(mask);
   }
 
   occupyPosition(row: number, column: number): void {
-    const mask = BigInt(0x1) << this.getShift(row, column);
+    const mask = bigInt(0x1).shiftLeft(this.getShift(row, column));
     if (this.occupiesPositionByMask(mask)) {
       const message = `"Row ${row} column ${column} is already occupied"`;
       throw new PositionAlreadyOccupiedError(message);
     }
-    this.state = this.state | mask;
+    this.state = this.state.or(mask);
   }
 
-  getRawState(): bigint {
+  getRawState(): bigInt.BigInteger {
     return this.state;
   }
 
-  private occupiesPositionByMask(mask: bigint): boolean {
-    return (this.state & mask) != BigInt(0x0);
+  private occupiesPositionByMask(mask: bigInt.BigInteger): boolean {
+    return this.state.and(mask).neq(bigInt(0x0));
   }
 
-  private getShift(row: number, column: number): bigint {
+  private getShift(row: number, column: number): bigInt.BigInteger {
     this.boundsCheck(row, column);
-    return BigInt(Constants.columns * row + column);
+    return bigInt(Constants.columns * row + column);
   }
 
   private boundsCheck(row: number, column: number) {
