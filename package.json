@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "start": "webpack-dev-server --config webpack/dev.config.js --open",
+    "start:dev": "webpack-dev-server --config webpack/dev.config.js --open",
+    "start": "node server.js",
     "build:dev": "webpack --config webpack/dev.config.js",
     "build": "webpack --config webpack/prod.config.js"
   },
