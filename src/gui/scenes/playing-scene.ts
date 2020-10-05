@@ -32,7 +32,7 @@ export class PlayingScene extends Scene {
   create() {
     this.add.image(0, 0, 'background').setOrigin(0, 0);
     this.add.image(50, 64, 'board').setOrigin(0, 0).setDepth(1);
-    this.input.on('pointerdown', this.onMouseButtonPress.bind(this));
+    this.input.on('pointerup', this.onMouseButtonPress.bind(this));
     this.moveIndicator = new MoveIndicator(new Math.Vector2(0, 25), this);
     this.restartButton = new RestartButton(
       new Math.Vector2(276, 516),

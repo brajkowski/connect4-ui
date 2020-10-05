@@ -81,7 +81,7 @@ export class RestartButton {
   constructor(position: Math.Vector2, scene: Scene, onClick?: () => void) {
     this.image = scene.add.image(position.x, position.y, 'p1').setOrigin(0, 0);
     this.image.setInteractive({ pixelPerfect: true });
-    this.image.on('pointerdown', () => {
+    this.image.on('pointerup', () => {
       this.triggerAnimation();
       onClick();
     });
