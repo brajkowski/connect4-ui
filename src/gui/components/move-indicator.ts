@@ -77,7 +77,7 @@ export class MoveIndicator {
 
   constructor(position: Math.Vector2, scene: Scene) {
     this.valid = true;
-    this.image = scene.add.image(position.x, position.y, 'v1');
+    this.image = scene.add.image(position.x, position.y, 'v1').setOrigin(0, 0);
   }
 
   setXPosition(x: number) {
