@@ -80,6 +80,10 @@ export class MoveIndicator {
     this.image = scene.add.image(position.x, position.y, 'v1').setOrigin(0, 0);
   }
 
+  setVisibility(visible: boolean) {
+    this.image.visible = visible;
+  }
+
   setXPosition(x: number) {
     this.image.setX(x);
   }
