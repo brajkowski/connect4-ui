@@ -122,8 +122,10 @@ export class PlayingScene extends Scene {
     this.logic.clear();
     this.chips.forEach((c) => c.destroy());
     this.chips = new Array<Chip>();
-    this.player = Player.One;
-    this.restartButton.reinitialize(true);
+    const random = new Math.RandomDataGenerator();
+    random.integerInRange(0, 1);
+    this.player = random.integerInRange(0, 1);
+    this.restartButton.reinitialize(this.player === Player.One);
     this.isInWinState = false;
     this.moveIndicator.setVisibility(true);
   }
