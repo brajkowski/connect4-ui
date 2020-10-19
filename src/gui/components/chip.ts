@@ -1,9 +1,10 @@
-import { GameObjects, Scene } from 'phaser';
+import { GameObjects, Scene, Sound } from 'phaser';
 import { Player } from '../../logic/logic';
 import chipPrimary from '../../assets/chip_primary.png';
 import chipSecondary from '../../assets/chip_secondary.png';
 import click from '../../assets/click.wav';
 import { ChipPositionMapper } from '../util/chip-position-mapper';
+import { globalScale } from '../util/scale';
 
 export class Chip {
   static preload(scene: Scene) {
@@ -11,9 +12,9 @@ export class Chip {
     scene.load.image('chipSecondary', chipSecondary);
     scene.load.audio('click', click);
   }
-  private static readonly gravity = 1;
+  private static readonly gravity = globalScale(1);
   private static readonly dampening = 0.5;
-  private static readonly bounceThreshold = 0.7;
+  private static readonly bounceThreshold = globalScale(0.7);
   private static readonly bounceVolumeCoeff = 0.1;
 
   private readonly sprite: GameObjects.Sprite;
