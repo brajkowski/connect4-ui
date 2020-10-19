@@ -7,6 +7,7 @@ import { Chip } from '../components/chip';
 import { MoveIndicator } from '../components/move-indicator';
 import { RestartButton } from '../components/restart-button';
 import { ColumnMapper } from '../util/column-mapper';
+import { globalScale } from '../util/scale';
 
 export class PlayingScene extends Scene {
   private moveIndicator: MoveIndicator;
@@ -31,38 +32,44 @@ export class PlayingScene extends Scene {
 
   create() {
     this.add.image(0, 0, 'background').setOrigin(0, 0);
-    this.add.image(50, 64, 'board').setOrigin(0, 0).setDepth(1);
+    this.add
+      .image(globalScale(50), globalScale(64), 'board')
+      .setOrigin(0, 0)
+      .setDepth(1);
     this.input.on('pointerup', this.onMouseButtonPress.bind(this));
-    this.moveIndicator = new MoveIndicator(new Math.Vector2(0, 25), this);
+    this.moveIndicator = new MoveIndicator(
+      new Math.Vector2(globalScale(0), globalScale(25)),
+      this
+    );
     this.restartButton = new RestartButton(
-      new Math.Vector2(276, 516),
+      new Math.Vector2(globalScale(276), globalScale(516)),
       this,
       this.restart.bind(this)
     );
     this.score1Text = this.make.text({
-      x: 165,
-      y: 525,
+      x: globalScale(165),
+      y: globalScale(525),
       text: `${this.score1}`,
       style: {
-        font: '30px "Arial"',
+        font: `${globalScale(30)}px "Arial"`,
         color: 'white',
       },
     });
     this.score2Text = this.make.text({
-      x: 445,
-      y: 525,
+      x: globalScale(445),
+      y: globalScale(525),
       text: `${this.score2}`,
       style: {
-        font: '30px "Arial"',
+        font: `${globalScale(30)}px "Arial"`,
         color: 'white',
       },
     });
     this.winningText = this.make.text({
-      x: 175,
-      y: 10,
+      x: globalScale(175),
+      y: globalScale(10),
       text: '',
       style: {
-        font: '40px "Arial"',
+        font: `${globalScale(40)}px "Arial"`,
         color: 'white',
       },
     });
@@ -77,7 +84,11 @@ export class PlayingScene extends Scene {
   }
 
   private onMouseButtonPress(pointer: Input.Pointer) {
-    if (pointer.y >= 64 && pointer.y <= 492 && !this.isInWinState) {
+    if (
+      pointer.y >= globalScale(64) &&
+      pointer.y <= globalScale(492) &&
+      !this.isInWinState
+    ) {
       this.dropChip(ColumnMapper.getColumnFromMouseCoordinate(pointer.x));
     }
   }
