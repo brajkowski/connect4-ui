@@ -4,7 +4,7 @@ import chipPrimary from '../../assets/chip_primary.png';
 import chipSecondary from '../../assets/chip_secondary.png';
 import click from '../../assets/click.wav';
 import { ChipPositionMapper } from '../util/chip-position-mapper';
-import { globalScale } from '../util/scale';
+import { globalAspectScale, globalScale } from '../util/scale';
 
 export class Chip {
   static preload(scene: Scene) {
@@ -15,7 +15,7 @@ export class Chip {
   private static readonly gravity = globalScale(1);
   private static readonly dampening = 0.5;
   private static readonly bounceThreshold = globalScale(0.7);
-  private static readonly bounceVolumeCoeff = 0.1;
+  private static readonly bounceVolumeCoeff = 0.1 / globalAspectScale;
 
   private readonly sprite: GameObjects.Sprite;
   private x: number;
