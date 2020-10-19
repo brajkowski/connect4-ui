@@ -76,9 +76,9 @@ export class PlayingScene extends Scene {
     this.winningText.visible = false;
   }
 
-  update() {
+  update(time, delta) {
     this.prepareMoveIndicator();
-    this.chips.forEach((c) => c.update());
+    this.chips.forEach((c) => c.update(time, delta));
     this.moveIndicator.update();
     this.restartButton.update();
   }

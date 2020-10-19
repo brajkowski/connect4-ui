@@ -12,10 +12,10 @@ export class Chip {
     scene.load.image('chipSecondary', chipSecondary);
     scene.load.audio('click', click);
   }
-  private static readonly gravity = globalScale(1);
+  private static readonly gravity = globalScale(0.08);
   private static readonly dampening = 0.5;
-  private static readonly bounceThreshold = globalScale(0.7);
-  private static readonly bounceVolumeCoeff = 0.1 / globalAspectScale;
+  private static readonly bounceThreshold = 0.7;
+  private static readonly bounceVolumeCoeff = 0.1;
 
   private readonly sprite: GameObjects.Sprite;
   private x: number;
@@ -53,15 +53,15 @@ export class Chip {
     this.sprite.destroy(false);
   }
 
-  update() {
+  update(time?: any, delta?: any) {
     if (!this.hasRested) {
-      this.fallingAnimation();
+      this.fallingAnimation(delta);
     }
   }
 
-  private fallingAnimation() {
+  private fallingAnimation(delta: any) {
     this.accelerate();
-    this.move();
+    this.move(delta);
     this.sprite.setPosition(this.x, this.currentY);
   }
 
@@ -69,8 +69,8 @@ export class Chip {
     this.velocityY += Chip.gravity;
   }
 
-  private move() {
-    this.currentY += this.velocityY;
+  private move(delta: any) {
+    this.currentY += this.velocityY * delta;
     if (this.currentY >= this.finalY && this.velocityY > 0) {
       this.bounce();
     }
