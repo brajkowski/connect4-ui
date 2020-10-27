@@ -2,7 +2,10 @@ import { GameObjects, Scene } from 'phaser';
 import { Player } from '../../logic/logic';
 import chipPrimary from '../../assets/chip_primary.png';
 import chipSecondary from '../../assets/chip_secondary.png';
-import click from '../../assets/click.wav';
+import click1 from '../../assets/click.ogg';
+import click2 from '../../assets/click.m4a';
+import click3 from '../../assets/click.mp3';
+import click4 from '../../assets/click.wav';
 import { ChipPositionMapper } from '../util/chip-position-mapper';
 import { globalScale } from '../util/scale';
 
@@ -10,7 +13,7 @@ export class Chip {
   static preload(scene: Scene) {
     scene.load.image('chipPrimary', chipPrimary);
     scene.load.image('chipSecondary', chipSecondary);
-    scene.load.audio('click', click);
+    scene.load.audio('click', [click1, click2, click3, click4]);
   }
   private static readonly gravity = globalScale(0.08);
   private static readonly dampening = 0.5;
