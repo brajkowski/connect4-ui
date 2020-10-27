@@ -1,10 +1,10 @@
-import { GameObjects, Scene, Sound } from 'phaser';
+import { GameObjects, Scene } from 'phaser';
 import { Player } from '../../logic/logic';
 import chipPrimary from '../../assets/chip_primary.png';
 import chipSecondary from '../../assets/chip_secondary.png';
 import click from '../../assets/click.wav';
 import { ChipPositionMapper } from '../util/chip-position-mapper';
-import { globalAspectScale, globalScale } from '../util/scale';
+import { globalScale } from '../util/scale';
 
 export class Chip {
   static preload(scene: Scene) {
@@ -23,7 +23,7 @@ export class Chip {
   private currentY: number;
   private velocityY = 0;
   private hasRested = false;
-  private playBouncingSound: () => void;
+  private playBouncingSound: () => void = () => {};
 
   constructor(player: Player, column: number, fallToRow: number, scene: Scene) {
     switch (player) {
@@ -42,6 +42,9 @@ export class Chip {
       this.hasRested = true;
       this.sprite.setPosition(this.x, this.finalY);
     }
+
+    // Hook in audio if it has been properly loaded (not all devices support all audio formats).
+    if (scene.game.cache.audio.get('click') === undefined) return;
     this.playBouncingSound = () => {
       const volume = Math.abs(this.velocityY * Chip.bounceVolumeCoeff);
       const sound = scene.sound.add('click', { volume: volume });
