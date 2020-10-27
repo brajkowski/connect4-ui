@@ -20,7 +20,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.wav$/,
+        test: /\.(ogg|mp3|m4a|wav)$/,
         use: 'file-loader',
         exclude: /node_modules/,
       },
