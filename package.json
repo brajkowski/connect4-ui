@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "start:dev": "webpack-dev-server --config webpack/dev.config.js --open",
+    "start:local": "webpack-dev-server --config webpack/dev.config.js --host 0.0.0.0",
     "start": "node server.js",
     "build:dev": "webpack --config webpack/dev.config.js",
     "build": "webpack --config webpack/prod.config.js"
