@@ -3,6 +3,7 @@ import background from '../../assets/background.png';
 import board from '../../assets/board.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';
 import { Player } from '../../logic/logic';
+import { IFrameEvents } from '../../util/iframe-events';
 import { Chip } from '../components/chip';
 import { MoveIndicator } from '../components/move-indicator';
 import { RestartButton } from '../components/restart-button';
@@ -74,6 +75,9 @@ export class PlayingScene extends Scene {
       },
     });
     this.winningText.visible = false;
+    IFrameEvents.listenForSleep(this);
+    IFrameEvents.listenForWake(this);
+    IFrameEvents.emitSceneCreated();
   }
 
   update(time, delta) {
