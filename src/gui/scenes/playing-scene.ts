@@ -21,7 +21,7 @@ export class PlayingScene extends Scene {
   private score2Text: GameObjects.Text;
   private winningText: GameObjects.Text;
   private drawText: GameObjects.Text;
-  private isInWinState = false;
+  private isInEndState = false;
   private logic = new BitboardLogic();
 
   preload() {
@@ -102,7 +102,7 @@ export class PlayingScene extends Scene {
     if (
       pointer.y >= globalScale(64) &&
       pointer.y <= globalScale(492) &&
-      !this.isInWinState
+      !this.isInEndState
     ) {
       this.dropChip(ColumnMapper.getColumnFromMouseCoordinate(pointer.x));
     }
@@ -118,14 +118,14 @@ export class PlayingScene extends Scene {
       this.player == Player.One ? this.score1++ : this.score2++;
       this.score1Text.text = this.score1.toString();
       this.score2Text.text = this.score2.toString();
-      this.isInWinState = true;
+      this.isInEndState = true;
       this.moveIndicator.setVisibility(false);
       this.winningText.text = `Player ${this.player + 1} Wins!`;
       this.winningText.visible = true;
       return;
     }
     if (this.logic.boardIsFull()) {
-      this.isInWinState = true;
+      this.isInEndState = true;
       this.moveIndicator.setVisibility(false);
       this.drawText.visible = true;
       return;
@@ -159,7 +159,7 @@ export class PlayingScene extends Scene {
     random.integerInRange(0, 1);
     this.player = random.integerInRange(0, 1);
     this.restartButton.reinitialize(this.player === Player.One);
-    this.isInWinState = false;
+    this.isInEndState = false;
     this.moveIndicator.setVisibility(true);
   }
 }
