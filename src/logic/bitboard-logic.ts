@@ -29,6 +29,9 @@ export class BitboardLogic implements Logic {
       this.checkDiagonalWin(state)
     );
   }
+  boardIsFull(): boolean {
+    return this.getGameState().eq(bigInt(0x3ffffffffff));
+  }
   canPlaceChip(column: number): boolean {
     const state = new BitboardPlayerState(this.getGameState());
     return !state.occupiesPosition(0, column);

@@ -134,4 +134,13 @@ describe('bitboard-logic', () => {
     expect(logic.didWin(p2)).toBe(true);
     expect(logic.didWin(p1)).toBe(false);
   });
+
+  it('Detects when the board is full', () => {
+    for (let i = 0; i < Constants.columns; i++) {
+      for (let j = 0; j < Constants.rows; j++) {
+        logic.placeChip(p1, i);
+      }
+    }
+    expect(logic.boardIsFull()).toBe(true);
+  });
 });
