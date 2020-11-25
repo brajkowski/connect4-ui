@@ -20,6 +20,7 @@ export class PlayingScene extends Scene {
   private score1Text: GameObjects.Text;
   private score2Text: GameObjects.Text;
   private winningText: GameObjects.Text;
+  private drawText: GameObjects.Text;
   private isInWinState = false;
   private logic = new BitboardLogic();
 
@@ -75,6 +76,16 @@ export class PlayingScene extends Scene {
       },
     });
     this.winningText.visible = false;
+    this.drawText = this.make.text({
+      x: globalScale(250),
+      y: globalScale(10),
+      text: 'Draw!',
+      style: {
+        font: `${globalScale(40)}px "Arial"`,
+        color: 'white',
+      },
+    });
+    this.drawText.visible = false;
     IFrameEvents.listenForSleep(this);
     IFrameEvents.listenForWake(this);
     IFrameEvents.emitSceneCreated();
@@ -113,6 +124,12 @@ export class PlayingScene extends Scene {
       this.winningText.visible = true;
       return;
     }
+    if (this.logic.boardIsFull()) {
+      this.isInWinState = true;
+      this.moveIndicator.setVisibility(false);
+      this.drawText.visible = true;
+      return;
+    }
     this.swapPlayers();
   }
 
@@ -134,6 +151,7 @@ export class PlayingScene extends Scene {
 
   private restart() {
     this.winningText.visible = false;
+    this.drawText.visible = false;
     this.logic.clear();
     this.chips.forEach((c) => c.destroy());
     this.chips = new Array<Chip>();
