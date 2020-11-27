@@ -30,6 +30,7 @@ export class HumanPlayerController implements PlayerController {
 
   cancelPromptForMove() {
     if (!this.hasBeenPrompted) return;
+    this.hasBeenPrompted = false;
     this.input.removeListener(this.pointerUpEvent, this.pointerUpListener);
     this.reject();
   }
