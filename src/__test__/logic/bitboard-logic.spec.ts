@@ -165,4 +165,38 @@ describe('bitboard-logic', () => {
     const copiedState = logicCopy.getGameState();
     expect(originalState.compareTo(copiedState)).not.toEqual(0);
   });
+
+  it('Returns the number of chips played by Player 1', () => {
+    const expected = 2;
+    logic.placeChip(p1, 0);
+    logic.placeChip(p1, 1);
+    logic.placeChip(p2, 0);
+    expect(logic.getChipsPlayed(p1)).toEqual(expected);
+  });
+
+  it('Returns the number of chips played by Player 2', () => {
+    const expected = 1;
+    logic.placeChip(p1, 0);
+    logic.placeChip(p1, 1);
+    logic.placeChip(p2, 0);
+    expect(logic.getChipsPlayed(p2)).toEqual(expected);
+  });
+
+  it('Resets chip counts after clearing game state', () => {
+    const expected = 0;
+    logic.placeChip(p1, 0);
+    logic.placeChip(p2, 0);
+    logic.clear();
+    expect(logic.getChipsPlayed(p1)).toEqual(expected);
+    expect(logic.getChipsPlayed(p2)).toEqual(expected);
+  });
+
+  it('Copies the chip counts to it child copies', () => {
+    const expected = 1;
+    logic.placeChip(p1, 0);
+    logic.placeChip(p2, 1);
+    const copiedLogic = logic.createCopy();
+    expect(copiedLogic.getChipsPlayed(p1)).toEqual(expected);
+    expect(copiedLogic.getChipsPlayed(p2)).toEqual(expected);
+  });
 });

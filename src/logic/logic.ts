@@ -8,6 +8,7 @@ export interface Logic {
   canPlaceChip(column: number): boolean;
   clear(): void;
   createCopy(): Logic;
+  getChipsPlayed(player: Player): number;
 }
 
 export enum Player {
