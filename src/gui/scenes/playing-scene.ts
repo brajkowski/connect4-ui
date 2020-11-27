@@ -105,7 +105,7 @@ export class PlayingScene extends Scene {
 
   private beginActivePlayerTurn() {
     this.getActivePlayerController()
-      .promptForMove(this.activePlayer, this.logic, this.input)
+      .promptForMove(this.activePlayer, this.logic.createCopy(), this.input)
       .then((column) => {
         if (!this.logic.canPlaceChip(column)) {
           this.beginActivePlayerTurn();
