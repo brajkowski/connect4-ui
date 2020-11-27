@@ -17,7 +17,7 @@ export class PlayingScene extends Scene {
   private moveIndicator: MoveIndicator;
   private restartButton: RestartButton;
   private chips = new Array<Chip>();
-  private player = Player.One;
+  private activePlayer = Player.One;
   private score1 = 0;
   private score2 = 0;
   private score1Text: GameObjects.Text;
@@ -104,7 +104,7 @@ export class PlayingScene extends Scene {
 
   private beginActivePlayerTurn() {
     this.getActivePlayerController()
-      .promptForMove(this.player, this.logic, this.input)
+      .promptForMove(this.activePlayer, this.logic, this.input)
       .then((column) => {
         if (!this.logic.canPlaceChip(column)) {
           this.beginActivePlayerTurn();
@@ -116,20 +116,20 @@ export class PlayingScene extends Scene {
   }
 
   private getActivePlayerController(): PlayerController {
-    return this.player === Player.One
+    return this.activePlayer === Player.One
       ? this.player1controller
       : this.player2controller;
   }
 
   private dropChip(column: number) {
-    const row = this.logic.placeChip(this.player, column);
-    this.chips.push(new Chip(this.player, column, row, this));
-    if (this.logic.didWin(this.player)) {
-      this.player == Player.One ? this.score1++ : this.score2++;
+    const row = this.logic.placeChip(this.activePlayer, column);
+    this.chips.push(new Chip(this.activePlayer, column, row, this));
+    if (this.logic.didWin(this.activePlayer)) {
+      this.activePlayer == Player.One ? this.score1++ : this.score2++;
       this.score1Text.text = this.score1.toString();
       this.score2Text.text = this.score2.toString();
       this.moveIndicator.setVisibility(false);
-      this.winningText.text = `Player ${this.player + 1} Wins!`;
+      this.winningText.text = `Player ${this.activePlayer + 1} Wins!`;
       this.winningText.visible = true;
       return;
     }
@@ -152,9 +152,9 @@ export class PlayingScene extends Scene {
   }
 
   private swapPlayers() {
-    this.player === Player.One
-      ? (this.player = Player.Two)
-      : (this.player = Player.One);
+    this.activePlayer === Player.One
+      ? (this.activePlayer = Player.Two)
+      : (this.activePlayer = Player.One);
     this.restartButton.triggerAnimation();
   }
 
@@ -166,8 +166,8 @@ export class PlayingScene extends Scene {
     this.chips = new Array<Chip>();
     const random = new Math.RandomDataGenerator();
     random.integerInRange(0, 1);
-    this.player = random.integerInRange(0, 1);
-    this.restartButton.reinitialize(this.player === Player.One);
+    this.activePlayer = random.integerInRange(0, 1);
+    this.restartButton.reinitialize(this.activePlayer === Player.One);
     this.moveIndicator.setVisibility(true);
     this.player1controller.cancelPromptForMove();
     this.player2controller.cancelPromptForMove();
