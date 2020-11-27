@@ -4,6 +4,7 @@ import board from '../../assets/board.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';
 import { Player } from '../../logic/logic';
 import { IFrameEvents } from '../../util/iframe-events';
+import { noop } from '../../util/no-op';
 import { Chip } from '../components/chip';
 import { MoveIndicator } from '../components/move-indicator';
 import { RestartButton } from '../components/restart-button';
@@ -110,7 +111,8 @@ export class PlayingScene extends Scene {
           return;
         }
         this.dropChip(column);
-      });
+      })
+      .catch(noop);
   }
 
   private getActivePlayerController(): PlayerController {
