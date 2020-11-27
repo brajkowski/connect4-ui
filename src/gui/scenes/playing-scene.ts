@@ -8,6 +8,7 @@ import { noop } from '../../util/no-op';
 import { Chip } from '../components/chip';
 import { MoveIndicator } from '../components/move-indicator';
 import { RestartButton } from '../components/restart-button';
+import { AiPlayerController } from '../controllers/ai-player-controller';
 import { HumanPlayerController } from '../controllers/human-player-controller';
 import { PlayerController } from '../controllers/player-controller';
 import { ColumnMapper } from '../util/column-mapper';
@@ -26,7 +27,7 @@ export class PlayingScene extends Scene {
   private drawText: GameObjects.Text;
   private logic = new BitboardLogic();
   private player1controller = new HumanPlayerController();
-  private player2controller = new HumanPlayerController();
+  private player2controller = new AiPlayerController();
 
   preload() {
     this.load.image('background', background);
