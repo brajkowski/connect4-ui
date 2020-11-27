@@ -7,6 +7,13 @@ import { Logic, Player } from './logic';
 export class BitboardLogic implements Logic {
   private p1: BitboardPlayerState = new BitboardPlayerState();
   private p2: BitboardPlayerState = new BitboardPlayerState();
+  private chipCounts: Map<Player, number>;
+
+  constructor() {
+    this.chipCounts = new Map();
+    this.chipCounts.set(Player.One, 0);
+    this.chipCounts.set(Player.Two, 0);
+  }
 
   getPlayerState(player: Player): BitboardPlayerState {
     switch (player) {
@@ -19,6 +26,7 @@ export class BitboardLogic implements Logic {
   placeChip(player: Player, column: number): number {
     const row = this.findHighestIndexRow(column);
     this.getPlayerState(player).occupyPosition(row, column);
+    this.chipCounts.set(player, this.chipCounts.get(player) + 1);
     return row;
   }
   didWin(player: Player): boolean {
@@ -39,6 +47,8 @@ export class BitboardLogic implements Logic {
   clear(): void {
     this.p1.clearAllPositions();
     this.p2.clearAllPositions();
+    this.chipCounts.set(Player.One, 0);
+    this.chipCounts.set(Player.Two, 0);
   }
   getGameState(): bigInt.BigInteger {
     return this.p1.getRawState().or(this.p2.getRawState());
@@ -47,7 +57,12 @@ export class BitboardLogic implements Logic {
     const copy = new BitboardLogic();
     copy.p1 = new BitboardPlayerState(this.p1.getRawState());
     copy.p2 = new BitboardPlayerState(this.p2.getRawState());
+    copy.chipCounts.set(Player.One, this.chipCounts.get(Player.One));
+    copy.chipCounts.set(Player.Two, this.chipCounts.get(Player.Two));
     return copy;
+  }
+  getChipsPlayed(player: Player): number {
+    return this.chipCounts.get(player);
   }
   private findHighestIndexRow(column: number): number {
     const state = new BitboardPlayerState(this.getGameState());
