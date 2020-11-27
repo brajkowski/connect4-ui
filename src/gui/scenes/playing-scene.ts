@@ -1,4 +1,4 @@
-import { GameObjects, Input, Math, Scene } from 'phaser';
+import { GameObjects, Math, Scene } from 'phaser';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';
@@ -7,6 +7,8 @@ import { IFrameEvents } from '../../util/iframe-events';
 import { Chip } from '../components/chip';
 import { MoveIndicator } from '../components/move-indicator';
 import { RestartButton } from '../components/restart-button';
+import { HumanPlayerController } from '../controllers/human-player-controller';
+import { PlayerController } from '../controllers/player-controller';
 import { ColumnMapper } from '../util/column-mapper';
 import { globalScale } from '../util/scale';
 
@@ -21,8 +23,9 @@ export class PlayingScene extends Scene {
   private score2Text: GameObjects.Text;
   private winningText: GameObjects.Text;
   private drawText: GameObjects.Text;
-  private isInEndState = false;
   private logic = new BitboardLogic();
+  private player1controller = new HumanPlayerController();
+  private player2controller = new HumanPlayerController();
 
   preload() {
     this.load.image('background', background);
@@ -38,7 +41,6 @@ export class PlayingScene extends Scene {
       .image(globalScale(50), globalScale(64), 'board')
       .setOrigin(0, 0)
       .setDepth(1);
-    this.input.on('pointerup', this.onMouseButtonPress.bind(this));
     this.moveIndicator = new MoveIndicator(
       new Math.Vector2(globalScale(0), globalScale(25)),
       this
@@ -89,6 +91,7 @@ export class PlayingScene extends Scene {
     IFrameEvents.listenForSleep(this);
     IFrameEvents.listenForWake(this);
     IFrameEvents.emitSceneCreated();
+    this.beginActivePlayerTurn();
   }
 
   update(time, delta) {
@@ -98,39 +101,43 @@ export class PlayingScene extends Scene {
     this.restartButton.update();
   }
 
-  private onMouseButtonPress(pointer: Input.Pointer) {
-    if (
-      pointer.y >= globalScale(64) &&
-      pointer.y <= globalScale(492) &&
-      !this.isInEndState
-    ) {
-      this.dropChip(ColumnMapper.getColumnFromMouseCoordinate(pointer.x));
-    }
+  private beginActivePlayerTurn() {
+    this.getActivePlayerController()
+      .promptForMove(this.player, this.logic, this.input)
+      .then((column) => {
+        if (!this.logic.canPlaceChip(column)) {
+          this.beginActivePlayerTurn();
+          return;
+        }
+        this.dropChip(column);
+      });
+  }
+
+  private getActivePlayerController(): PlayerController {
+    return this.player === Player.One
+      ? this.player1controller
+      : this.player2controller;
   }
 
   private dropChip(column: number) {
-    if (!this.logic.canPlaceChip(column)) {
-      return;
-    }
     const row = this.logic.placeChip(this.player, column);
     this.chips.push(new Chip(this.player, column, row, this));
     if (this.logic.didWin(this.player)) {
       this.player == Player.One ? this.score1++ : this.score2++;
       this.score1Text.text = this.score1.toString();
       this.score2Text.text = this.score2.toString();
-      this.isInEndState = true;
       this.moveIndicator.setVisibility(false);
       this.winningText.text = `Player ${this.player + 1} Wins!`;
       this.winningText.visible = true;
       return;
     }
     if (this.logic.boardIsFull()) {
-      this.isInEndState = true;
       this.moveIndicator.setVisibility(false);
       this.drawText.visible = true;
       return;
     }
     this.swapPlayers();
+    this.beginActivePlayerTurn();
   }
 
   private prepareMoveIndicator() {
@@ -159,7 +166,9 @@ export class PlayingScene extends Scene {
     random.integerInRange(0, 1);
     this.player = random.integerInRange(0, 1);
     this.restartButton.reinitialize(this.player === Player.One);
-    this.isInEndState = false;
     this.moveIndicator.setVisibility(true);
+    this.player1controller.cancelPromptForMove();
+    this.player2controller.cancelPromptForMove();
+    this.beginActivePlayerTurn();
   }
 }
