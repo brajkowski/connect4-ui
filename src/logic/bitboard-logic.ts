@@ -43,6 +43,12 @@ export class BitboardLogic implements Logic {
   getGameState(): bigInt.BigInteger {
     return this.p1.getRawState().or(this.p2.getRawState());
   }
+  createCopy(): BitboardLogic {
+    const copy = new BitboardLogic();
+    copy.p1 = new BitboardPlayerState(this.p1.getRawState());
+    copy.p2 = new BitboardPlayerState(this.p2.getRawState());
+    return copy;
+  }
   private findHighestIndexRow(column: number): number {
     const state = new BitboardPlayerState(this.getGameState());
     for (let i = Constants.maxRowIndex; i > 0; i--) {

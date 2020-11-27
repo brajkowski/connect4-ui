@@ -143,4 +143,26 @@ describe('bitboard-logic', () => {
     }
     expect(logic.boardIsFull()).toBe(true);
   });
+
+  it('Can provide a copy of itself', () => {
+    logic.placeChip(p1, 0);
+    logic.placeChip(p2, 1);
+    const originalP1State = logic.getPlayerState(p1).getRawState();
+    const originalP2State = logic.getPlayerState(p2).getRawState();
+    const logicCopy = logic.createCopy();
+    const copiedP1State = logicCopy.getPlayerState(p1).getRawState();
+    const copiedP2State = logicCopy.getPlayerState(p2).getRawState();
+    expect(copiedP1State).toEqual(originalP1State);
+    expect(copiedP2State).toEqual(originalP2State);
+  });
+
+  it('Is not impacted by changes to child copies', () => {
+    logic.placeChip(p1, 0);
+    logic.placeChip(p2, 1);
+    const originalState = logic.getGameState();
+    const logicCopy = logic.createCopy();
+    logicCopy.placeChip(p1, 1);
+    const copiedState = logicCopy.getGameState();
+    expect(originalState.compareTo(copiedState)).not.toEqual(0);
+  });
 });

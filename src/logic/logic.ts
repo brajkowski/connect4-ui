@@ -7,6 +7,7 @@ export interface Logic {
   boardIsFull(): boolean;
   canPlaceChip(column: number): boolean;
   clear(): void;
+  createCopy(): Logic;
 }
 
 export enum Player {
