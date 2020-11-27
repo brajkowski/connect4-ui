@@ -10,12 +10,14 @@ export class HumanPlayerController implements PlayerController {
   private resolve: (value?: number | PromiseLike<number>) => void;
   private reject: (reason?: any) => void;
   private pointerUpListener: Function;
+  private hasBeenPrompted = false;
 
   promptForMove(
     player: Player,
     logic: Logic,
     input: Input.InputPlugin
   ): Promise<number> {
+    this.hasBeenPrompted = true;
     return new Promise((resolve, reject) => {
       this.input = input;
       this.resolve = resolve;
@@ -27,6 +29,7 @@ export class HumanPlayerController implements PlayerController {
   }
 
   cancelPromptForMove() {
+    if (!this.hasBeenPrompted) return;
     this.input.removeListener(this.pointerUpEvent, this.pointerUpListener);
     this.reject();
   }
