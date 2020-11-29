@@ -1,12 +1,15 @@
-import { Math } from 'phaser';
+import { AiStrategy } from '../../ai/ai-strategy';
 import { Player, Logic } from '../../logic/logic';
-import { Constants } from '../../util/constants';
 import { PlayerController } from './player-controller';
 
 export class AiPlayerController implements PlayerController {
-  private readonly thinkingTime = 2000; // ms.
   private reject: (reason?: any) => void;
   private hasBeenPrompted = false;
+  private strategy: AiStrategy;
+
+  constructor(strategy: AiStrategy) {
+    this.strategy = strategy;
+  }
 
   promptForMove(
     player: Player,
@@ -16,12 +19,7 @@ export class AiPlayerController implements PlayerController {
     this.hasBeenPrompted = true;
     return new Promise((resolve, reject) => {
       this.reject = reject;
-      const availableMoves: number[] = [];
-      for (let i = 0; i < Constants.columns; i++) {
-        if (logic.canPlaceChip(i)) availableMoves.push(i);
-      }
-      const random = new Math.RandomDataGenerator();
-      setTimeout(() => resolve(random.pick(availableMoves)), this.thinkingTime);
+      this.strategy.getOptimalMove(player, logic).then(resolve);
     });
   }
 
