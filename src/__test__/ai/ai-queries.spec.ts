@@ -1,6 +1,6 @@
 import { canWinOnNextTurn, canWinOnNthTurn } from '../../ai/ai-queries';
 import { BitboardLogic } from '../../logic/bitboard-logic';
-import { Player } from '../../logic/logic';
+import { Player, WinType } from '../../logic/logic';
 
 const logic = new BitboardLogic();
 const p1 = Player.One;
@@ -14,7 +14,11 @@ describe('ai-queries', () => {
   it('Should detect when players can win on next move', () => {
     const test = (player: Player, winningMoves: number[]) => {
       const result = canWinOnNextTurn(player, logic);
-      expect(result).toEqual({ result: true, moves: winningMoves });
+      expect(result).toEqual({
+        result: true,
+        moves: winningMoves,
+        type: WinType.Vertical,
+      });
     };
     logic.placeChip(p1, 0);
     logic.placeChip(p1, 0);
@@ -62,13 +66,21 @@ describe('ai-queries', () => {
     logic.placeChip(p1, 3);
     logic.placeChip(p1, 3);
     const result = canWinOnNthTurn(p1, logic, 3);
-    expect(result).toEqual({ result: true, moves: [3, 3] });
+    expect(result).toEqual({
+      result: true,
+      moves: [3, 3],
+      type: WinType.Vertical,
+    });
   });
 
   it('Prefers to play equivalent winning moves nearer to the center first', () => {
     logic.placeChip(p1, 3);
     logic.placeChip(p1, 4);
     const result = canWinOnNthTurn(p1, logic, 3);
-    expect(result).toEqual({ result: true, moves: [2, 1] });
+    expect(result).toEqual({
+      result: true,
+      moves: [2, 1],
+      type: WinType.Horizontal,
+    });
   });
 });

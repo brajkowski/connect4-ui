@@ -1,9 +1,10 @@
-import { Logic, Player } from '../logic/logic';
+import { Logic, Player, WinType } from '../logic/logic';
 import { Constants } from '../util/constants';
 
 export interface AiQueryResult {
   result: boolean;
   moves?: number[];
+  type?: WinType;
 }
 
 export function canWinOnNextTurn(player: Player, logic: Logic): AiQueryResult {
@@ -11,8 +12,9 @@ export function canWinOnNextTurn(player: Player, logic: Logic): AiQueryResult {
     if (logic.canPlaceChip(column)) {
       const logicCopy = logic.createCopy();
       logicCopy.placeChip(player, column);
-      if (logicCopy.didWin(player)) {
-        return { result: true, moves: [column] };
+      const result = logicCopy.didWinWithType(player);
+      if (result.result === true) {
+        return { result: true, moves: [column], type: result.type };
       }
     }
   }
@@ -25,8 +27,9 @@ export function canWinOnNthTurn(
   nthTurn: number,
   moves?: number[]
 ): AiQueryResult {
-  if (logic.didWin(player)) {
-    return { result: true, moves };
+  const result = logic.didWinWithType(player);
+  if (result.result === true) {
+    return { result: true, moves, type: result.type };
   }
   if (!moves) {
     moves = [];
