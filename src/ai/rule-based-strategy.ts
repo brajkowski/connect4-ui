@@ -6,19 +6,33 @@ import { Math } from 'phaser';
 
 export class RuleBasedStrategy implements AiStrategy {
   private readonly random = new Math.RandomDataGenerator();
+  private simulatedThinkingTime?: number;
+
+  constructor(simulatedThinkingTime?: number) {
+    this.simulatedThinkingTime = simulatedThinkingTime;
+  }
 
   getOptimalMove(player: Player, logic: Logic): Promise<number> {
+    return new Promise((resolve) => {
+      setTimeout(
+        () => resolve(this._getOptimalMove(player, logic)),
+        this.simulatedThinkingTime
+      );
+    });
+  }
+
+  private _getOptimalMove(player: Player, logic: Logic): number {
     // Make a winning move if it exists.
     const nextMoveWin = canWinOnNextTurn(player, logic);
     if (nextMoveWin.result === true) {
-      return Promise.resolve(nextMoveWin.moves[0]);
+      return nextMoveWin.moves[0];
     }
 
     // Block opponent winning move if it exists.
     const opponent = this.getOpponent(player);
     const opponentNextMoveWin = canWinOnNextTurn(opponent, logic);
     if (opponentNextMoveWin.result === true) {
-      return Promise.resolve(opponentNextMoveWin.moves[0]);
+      return opponentNextMoveWin.moves[0];
     }
 
     // Inspect 2 opponent winning moves ahead and block the first in the sequence.
@@ -29,14 +43,12 @@ export class RuleBasedStrategy implements AiStrategy {
         opponentWinsIn2.moves[0] === opponentWinsIn2.moves[1] &&
         opponentWinsIn2.type !== WinType.Vertical
       ) {
-        return Promise.resolve(
-          this.randomFallback(logic, [opponentWinsIn2.moves[0]])
-        );
+        return this.randomFallback(logic, [opponentWinsIn2.moves[0]]);
       } else {
-        return Promise.resolve(opponentWinsIn2.moves[0]);
+        return opponentWinsIn2.moves[0];
       }
     }
-    return Promise.resolve(this.randomFallback(logic));
+    return this.randomFallback(logic);
   }
 
   private getOpponent(player: Player): Player {

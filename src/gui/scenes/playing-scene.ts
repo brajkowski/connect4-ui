@@ -29,7 +29,9 @@ export class PlayingScene extends Scene {
   private drawText: GameObjects.Text;
   private logic = new BitboardLogic();
   private player1controller = new HumanPlayerController();
-  private player2controller = new AiPlayerController(new RuleBasedStrategy());
+  private player2controller = new AiPlayerController(
+    new RuleBasedStrategy(1500)
+  );
 
   preload() {
     this.load.image('background', background);
