@@ -54,7 +54,7 @@ describe('ai-queries', () => {
   it('Can chain together a winning sequence of N moves', () => {
     const test = (player: Player, turns: number, moves: number[]) => {
       const result = canWinOnNthTurn(player, logic, turns);
-      expect(result).toEqual({ result: true, moves });
+      expect(result).toEqual({ result: true, moves, type: WinType.Horizontal });
     };
     test(p1, 3, [3, 0, 1, 2]);
     logic.placeChip(p1, 3);
@@ -81,6 +81,17 @@ describe('ai-queries', () => {
       result: true,
       moves: [2, 1],
       type: WinType.Horizontal,
+    });
+  });
+
+  it('Returns proper win type when querying for canWinOnNthTurn', () => {
+    logic.placeChip(p1, 3);
+    logic.placeChip(p1, 3);
+    const result = canWinOnNthTurn(p1, logic, 1);
+    expect(result).toEqual({
+      result: true,
+      moves: [3, 3],
+      type: WinType.Vertical,
     });
   });
 });

@@ -37,7 +37,7 @@ export function canWinOnNthTurn(
   if (nthTurn === 0) {
     const result = canWinOnNextTurn(player, logic);
     moves = moves.concat(result.moves);
-    return { result: result.result, moves };
+    return { result: result.result, moves, type: result.type };
   }
 
   const children: { logic: Logic; column: number }[] = [];
