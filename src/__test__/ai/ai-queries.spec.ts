@@ -52,10 +52,10 @@ describe('ai-queries', () => {
       const result = canWinOnNthTurn(player, logic, turns);
       expect(result).toEqual({ result: true, moves });
     };
-    test(p1, 3, [0, 0, 0, 0]);
+    test(p1, 3, [3, 0, 1, 2]);
     logic.placeChip(p1, 3);
     logic.placeChip(p1, 4);
-    test(p1, 1, [1, 2]);
+    test(p1, 1, [2, 1]);
   });
 
   it('Detects smaller winning sequences (n < N) if they exist', () => {
@@ -63,5 +63,12 @@ describe('ai-queries', () => {
     logic.placeChip(p1, 3);
     const result = canWinOnNthTurn(p1, logic, 3);
     expect(result).toEqual({ result: true, moves: [3, 3] });
+  });
+
+  it('Prefers to play equivalent winning moves nearer to the center first', () => {
+    logic.placeChip(p1, 3);
+    logic.placeChip(p1, 4);
+    const result = canWinOnNthTurn(p1, logic, 3);
+    expect(result).toEqual({ result: true, moves: [2, 1] });
   });
 });

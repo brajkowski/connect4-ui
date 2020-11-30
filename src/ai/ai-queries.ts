@@ -52,10 +52,16 @@ export function canWinOnNthTurn(
       nthTurn - 1,
       moves.concat(children[i].column)
     );
+    // Optimizers.
     if (result.result === true) {
       if (!optimalResult) {
         optimalResult = result;
       } else if (result.moves?.length < optimalResult.moves?.length) {
+        optimalResult = result;
+      } else if (
+        result.moves?.length === optimalResult.moves?.length &&
+        Math.abs(3 - result.moves[0]) < Math.abs(3 - optimalResult.moves[0])
+      ) {
         optimalResult = result;
       }
     }
