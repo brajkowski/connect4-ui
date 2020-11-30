@@ -2,7 +2,7 @@ import bigInt = require('big-integer');
 import { Constants } from '../util/constants';
 import { BitboardPlayerState } from './bitboard-player-state';
 import { FullColumnError } from './full-column-error';
-import { Logic, Player } from './logic';
+import { Logic, Player, WinType } from './logic';
 
 export class BitboardLogic implements Logic {
   private p1: BitboardPlayerState = new BitboardPlayerState();
@@ -36,6 +36,19 @@ export class BitboardLogic implements Logic {
       this.checkHorizontalWin(state) ||
       this.checkDiagonalWin(state)
     );
+  }
+  didWinWithType(player: Player): { result: boolean; type?: WinType } {
+    const state = this.getPlayerState(player).getRawState();
+    if (this.checkVerticalWin(state)) {
+      return { result: true, type: WinType.Vertical };
+    }
+    if (this.checkHorizontalWin(state)) {
+      return { result: true, type: WinType.Horizontal };
+    }
+    if (this.checkDiagonalWin(state)) {
+      return { result: true, type: WinType.Diagonal };
+    }
+    return { result: false };
   }
   boardIsFull(): boolean {
     return this.getGameState().eq(bigInt(0x3ffffffffff));
