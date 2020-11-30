@@ -5,6 +5,7 @@ export interface AiQueryResult {
   result: boolean;
   moves?: number[];
 }
+
 export function canWinOnNextTurn(player: Player, logic: Logic): AiQueryResult {
   for (let column = 0; column < Constants.columns; column++) {
     if (logic.canPlaceChip(column)) {
