@@ -57,4 +57,11 @@ describe('ai-queries', () => {
     logic.placeChip(p1, 4);
     test(p1, 1, [1, 2]);
   });
+
+  it('Detects smaller winning sequences (n < N) if they exist', () => {
+    logic.placeChip(p1, 3);
+    logic.placeChip(p1, 3);
+    const result = canWinOnNthTurn(p1, logic, 3);
+    expect(result).toEqual({ result: true, moves: [3, 3] });
+  });
 });

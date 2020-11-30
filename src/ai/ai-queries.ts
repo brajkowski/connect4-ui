@@ -24,6 +24,9 @@ export function canWinOnNthTurn(
   nthTurn: number,
   moves?: number[]
 ): AiQueryResult {
+  if (logic.didWin(player)) {
+    return { result: true, moves };
+  }
   if (!moves) {
     moves = [];
   }
@@ -34,6 +37,7 @@ export function canWinOnNthTurn(
   }
 
   const children: { logic: Logic; column: number }[] = [];
+  let optimalResult: AiQueryResult;
   for (let column = 0; column < Constants.columns; column++) {
     if (logic.canPlaceChip(column)) {
       const childLogic = logic.createCopy();
@@ -48,7 +52,16 @@ export function canWinOnNthTurn(
       nthTurn - 1,
       moves.concat(children[i].column)
     );
-    if (result.result === true) return result;
+    if (result.result === true) {
+      if (!optimalResult) {
+        optimalResult = result;
+      } else if (result.moves?.length < optimalResult.moves?.length) {
+        optimalResult = result;
+      }
+    }
+  }
+  if (optimalResult) {
+    return optimalResult;
   }
   return { result: false };
 }
