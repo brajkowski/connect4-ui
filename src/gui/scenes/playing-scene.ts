@@ -1,4 +1,5 @@
 import { GameObjects, Math, Scene } from 'phaser';
+import { RuleBasedStrategy } from '../../ai/rule-based-strategy';
 import { RandomStrategy } from '../../ai/random-strategy';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
@@ -28,7 +29,7 @@ export class PlayingScene extends Scene {
   private drawText: GameObjects.Text;
   private logic = new BitboardLogic();
   private player1controller = new HumanPlayerController();
-  private player2controller = new AiPlayerController(new RandomStrategy(1000));
+  private player2controller = new AiPlayerController(new RuleBasedStrategy());
 
   preload() {
     this.load.image('background', background);
