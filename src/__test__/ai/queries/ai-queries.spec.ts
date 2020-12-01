@@ -1,19 +1,19 @@
 import {
-  AiQueryOptimizer,
-  AiQueryOptimizerRules,
   canWinOnNextTurn,
   canWinOnNthTurn,
-} from '../../ai/ai-queries';
-import { BitboardLogic } from '../../logic/bitboard-logic';
-import { Player, WinType } from '../../logic/logic';
+} from '../../../ai/queries/ai-queries';
+import { QueryOptimizer } from '../../../ai/queries/optimization/query-optimizer';
+import {
+  preferFewerMoves,
+  preferMovesNearCenter,
+} from '../../../ai/queries/optimization/rules';
+import { BitboardLogic } from '../../../logic/bitboard-logic';
+import { Player, WinType } from '../../../logic/logic';
 
 const logic = new BitboardLogic();
 const p1 = Player.One;
 const p2 = Player.Two;
-const optimizer = new AiQueryOptimizer([
-  AiQueryOptimizerRules.preferFewerMoves,
-  AiQueryOptimizerRules.preferMovesNearCenter,
-]);
+const optimizer = new QueryOptimizer([preferFewerMoves, preferMovesNearCenter]);
 
 describe('ai-queries', () => {
   beforeEach(() => {

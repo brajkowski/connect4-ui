@@ -1,6 +1,6 @@
 import { Player, Logic, WinType } from '../logic/logic';
 import { Constants } from '../util/constants';
-import { canWinOnNextTurn, canWinOnNthTurn } from './ai-queries';
+import { canWinOnNextTurn, canWinOnNthTurn } from './query/ai-queries';
 import { AiStrategy } from './ai-strategy';
 import { Math } from 'phaser';
 
