@@ -57,7 +57,6 @@ describe('ai-queries', () => {
 
   it('Cannot detect a winning move in 3 total moves on a blank game', () => {
     const result = canWinOnNthTurn(p1, logic, 2, optimizer);
-    console.log(result);
     expect(result.result).toBe(false);
   });
 
