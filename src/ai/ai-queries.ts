@@ -25,15 +25,20 @@ export function canWinOnNthTurn(
   player: Player,
   logic: Logic,
   nthTurn: number,
-  moves?: number[],
+  optimizer?: AiQueryOptimizer
+): AiQueryResult {
+  return _canWinOnNthTurn(player, logic, nthTurn, [], optimizer);
+}
+function _canWinOnNthTurn(
+  player: Player,
+  logic: Logic,
+  nthTurn: number,
+  moves: number[],
   optimizer?: AiQueryOptimizer
 ): AiQueryResult {
   const result = logic.didWinWithType(player);
   if (result.result === true) {
     return { result: true, moves, type: result.type };
-  }
-  if (!moves) {
-    moves = [];
   }
   if (nthTurn === 0) {
     const result = canWinOnNextTurn(player, logic);
@@ -50,7 +55,7 @@ export function canWinOnNthTurn(
     }
   }
   for (let i = 0; i < children.length; i++) {
-    const result = canWinOnNthTurn(
+    const result = _canWinOnNthTurn(
       player,
       children[i].logic,
       nthTurn - 1,
