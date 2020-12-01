@@ -1,8 +1,8 @@
-import { Player, Logic, WinType } from '../logic/logic';
-import { Constants } from '../util/constants';
-import { canWinOnNextTurn, canWinOnNthTurn } from './query/ai-queries';
-import { AiStrategy } from './ai-strategy';
 import { Math } from 'phaser';
+import { Logic, Player, WinType } from '../logic/logic';
+import { Constants } from '../util/constants';
+import { AiStrategy } from './ai-strategy';
+import { canWinOnNextTurn, canWinOnNthTurn } from './queries/ai-queries';
 
 export class RuleBasedStrategy implements AiStrategy {
   private readonly random = new Math.RandomDataGenerator();
