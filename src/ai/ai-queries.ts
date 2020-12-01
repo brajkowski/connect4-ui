@@ -25,7 +25,8 @@ export function canWinOnNthTurn(
   player: Player,
   logic: Logic,
   nthTurn: number,
-  moves?: number[]
+  moves?: number[],
+  optimizer?: AiQueryOptimizer
 ): AiQueryResult {
   const result = logic.didWinWithType(player);
   if (result.result === true) {
@@ -41,7 +42,6 @@ export function canWinOnNthTurn(
   }
 
   const children: { logic: Logic; column: number }[] = [];
-  let optimalResult: AiQueryResult;
   for (let column = 0; column < Constants.columns; column++) {
     if (logic.canPlaceChip(column)) {
       const childLogic = logic.createCopy();
@@ -54,24 +54,54 @@ export function canWinOnNthTurn(
       player,
       children[i].logic,
       nthTurn - 1,
-      moves.concat(children[i].column)
+      moves.concat(children[i].column),
+      optimizer
     );
-    // Optimizers.
     if (result.result === true) {
-      if (!optimalResult) {
-        optimalResult = result;
-      } else if (result.moves?.length < optimalResult.moves?.length) {
-        optimalResult = result;
-      } else if (
-        result.moves?.length === optimalResult.moves?.length &&
-        Math.abs(3 - result.moves[0]) < Math.abs(3 - optimalResult.moves[0])
-      ) {
-        optimalResult = result;
+      if (!optimizer) return result;
+      optimizer.test(result);
+    }
+  }
+  const optimalResult = optimizer?.getOptimalResult();
+  return optimalResult ? optimalResult : { result: false };
+}
+
+export class AiQueryOptimizer {
+  private optimalResult: AiQueryResult;
+  private rules: AiQueryOptimizerRule[];
+
+  constructor(rules: AiQueryOptimizerRule[]) {
+    this.rules = rules;
+  }
+
+  test(result: AiQueryResult) {
+    if (!this.optimalResult) {
+      this.optimalResult = result;
+      return;
+    }
+    for (let i = 0; i < this.rules.length; i++) {
+      if (this.rules[i](result, this.optimalResult)) {
+        this.optimalResult = result;
+        return;
       }
     }
   }
-  if (optimalResult) {
-    return optimalResult;
+
+  getOptimalResult(): AiQueryResult {
+    const result = this.optimalResult;
+    this.optimalResult = null;
+    return result;
   }
-  return { result: false };
+}
+
+export interface AiQueryOptimizerRule {
+  (result: AiQueryResult, optimalResult: AiQueryResult): boolean;
+}
+
+export class AiQueryOptimizerRules {
+  static preferFewerMoves: AiQueryOptimizerRule = (r, o) =>
+    r.moves?.length < o.moves?.length;
+  static preferMovesNearCenter: AiQueryOptimizerRule = (r, o) =>
+    r.moves?.length === o.moves?.length &&
+    Math.abs(3 - r.moves?.[0]) < Math.abs(3 - o.moves?.[0]);
 }
