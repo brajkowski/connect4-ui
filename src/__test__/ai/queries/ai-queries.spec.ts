@@ -68,7 +68,7 @@ describe('ai-queries', () => {
     test(p1, 3, [3, 0, 1, 2]);
     logic.placeChip(p1, 3);
     logic.placeChip(p1, 4);
-    test(p1, 1, [2, 1]);
+    test(p1, 1, [2, 5]);
   });
 
   it('Detects smaller winning sequences (n < N) if they exist', () => {

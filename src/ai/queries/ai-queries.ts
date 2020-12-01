@@ -9,17 +9,18 @@ export interface AiQueryResult {
 }
 
 export function canWinOnNextTurn(player: Player, logic: Logic): AiQueryResult {
-  for (let column = 0; column < Constants.columns; column++) {
-    if (logic.canPlaceChip(column)) {
-      const logicCopy = logic.createCopy();
-      logicCopy.placeChip(player, column);
-      const result = logicCopy.didWinWithType(player);
-      if (result.result === true) {
-        return { result: true, moves: [column], type: result.type };
-      }
+  let result: AiQueryResult = { result: false };
+  doWithValidMoves(player, logic, (action) => {
+    let winResult = action.updatedLogic.didWinWithType(player);
+    if (winResult.result === true) {
+      result = {
+        result: true,
+        moves: [action.columnPlayed],
+        type: winResult.type,
+      };
     }
-  }
-  return { result: false };
+  });
+  return result;
 }
 
 export function canWinOnNthTurn(
@@ -48,20 +49,14 @@ function _canWinOnNthTurn(
     return { result: result.result, moves, type: result.type };
   }
 
-  const children: { logic: Logic; column: number }[] = [];
-  for (let column = 0; column < Constants.columns; column++) {
-    if (logic.canPlaceChip(column)) {
-      const childLogic = logic.createCopy();
-      childLogic.placeChip(player, column);
-      children.push({ logic: childLogic, column });
-    }
-  }
+  const children: Action[] = [];
+  doWithValidMoves(player, logic, (a) => children.push(a));
   for (let i = 0; i < children.length; i++) {
     const result = _canWinOnNthTurn(
       player,
-      children[i].logic,
+      children[i].updatedLogic,
       nthTurn - 1,
-      moves.concat(children[i].column),
+      moves.concat(children[i].columnPlayed),
       optimizer
     );
     if (result.result === true) {
@@ -71,4 +66,23 @@ function _canWinOnNthTurn(
   }
   const optimalResult = optimizer?.getOptimalResult();
   return optimalResult ? optimalResult : { result: false };
+}
+
+interface Action {
+  updatedLogic: Logic;
+  columnPlayed: number;
+}
+
+function doWithValidMoves(
+  player: Player,
+  logic: Logic,
+  action: (a: Action) => void
+): void {
+  for (let columnPlayed = 0; columnPlayed < Constants.columns; columnPlayed++) {
+    if (logic.canPlaceChip(columnPlayed)) {
+      const updatedLogic = logic.createCopy();
+      updatedLogic.placeChip(player, columnPlayed);
+      action({ updatedLogic, columnPlayed });
+    }
+  }
 }
