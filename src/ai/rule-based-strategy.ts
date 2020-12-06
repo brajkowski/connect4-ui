@@ -3,9 +3,18 @@ import { Logic, Player, WinType } from '../logic/logic';
 import { Constants } from '../util/constants';
 import { AiStrategy } from './ai-strategy';
 import { canWinOnNextTurn, canWinOnNthTurn } from './queries/ai-queries';
+import { QueryOptimizer } from './queries/optimization/query-optimizer';
+import {
+  preferFewerMoves,
+  preferMovesNearCenter,
+} from './queries/optimization/rules';
 
 export class RuleBasedStrategy implements AiStrategy {
   private readonly random = new Math.RandomDataGenerator();
+  private readonly optimizer = new QueryOptimizer([
+    preferFewerMoves,
+    preferMovesNearCenter,
+  ]);
   private simulatedThinkingTime?: number;
 
   constructor(simulatedThinkingTime?: number) {
@@ -22,6 +31,7 @@ export class RuleBasedStrategy implements AiStrategy {
   }
 
   private _getOptimalMove(player: Player, logic: Logic): number {
+    const avoid = new Set<number>();
     // Make a winning move if it exists.
     const nextMoveWin = canWinOnNextTurn(player, logic);
     if (nextMoveWin.result === true) {
@@ -36,14 +46,14 @@ export class RuleBasedStrategy implements AiStrategy {
     }
 
     // Inspect 2 opponent winning moves ahead and block the first in the sequence.
-    const opponentWinsIn2 = canWinOnNthTurn(opponent, logic, 1);
+    const opponentWinsIn2 = canWinOnNthTurn(opponent, logic, 1, this.optimizer);
     if (opponentWinsIn2.result === true) {
       // Optimizer: If the opponent can win with stacking two pieces, ensure the first is not required only for stacking.
       if (
         opponentWinsIn2.moves[0] === opponentWinsIn2.moves[1] &&
         opponentWinsIn2.type !== WinType.Vertical
       ) {
-        return this.randomFallback(logic, [opponentWinsIn2.moves[0]]);
+        avoid.add(opponentWinsIn2.moves[0]);
       } else {
         return opponentWinsIn2.moves[0];
       }
@@ -53,14 +63,22 @@ export class RuleBasedStrategy implements AiStrategy {
     if (logic.getChipsPlayed(player) === 0) {
       return 3;
     }
-    return this.randomFallback(logic);
+
+    // Play an attacking move.
+    const winsIn2 = canWinOnNthTurn(player, logic, 1, this.optimizer);
+    if (winsIn2.result === true) {
+      if (!avoid.has(winsIn2.moves[0])) {
+        return winsIn2.moves[0];
+      }
+    }
+    return this.randomFallback(logic, avoid);
   }
 
   private getOpponent(player: Player): Player {
     return player === Player.One ? Player.Two : Player.One;
   }
 
-  private randomFallback(logic: Logic, tryToPrevent?: number[]): number {
+  private randomFallback(logic: Logic, tryToPrevent?: Set<number>): number {
     const availableColumns: Set<number> = new Set();
     for (let column = 0; column < Constants.columns; column++) {
       if (logic.canPlaceChip(column)) availableColumns.add(column);
