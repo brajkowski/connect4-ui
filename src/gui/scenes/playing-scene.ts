@@ -1,6 +1,5 @@
 import { GameObjects, Math, Scene } from 'phaser';
-import { RuleBasedStrategy } from '../../ai/rule-based-strategy';
-import { RandomStrategy } from '../../ai/random-strategy';
+import { RuleBasedStrategy } from '../../ai/strategies/rule-based-strategy';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';

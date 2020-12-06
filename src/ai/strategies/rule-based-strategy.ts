@@ -1,13 +1,13 @@
 import { Math } from 'phaser';
-import { Logic, Player, WinType } from '../logic/logic';
-import { Constants } from '../util/constants';
-import { AiStrategy } from './ai-strategy';
-import { canWinOnNextTurn, canWinOnNthTurn } from './queries/ai-queries';
-import { QueryOptimizer } from './queries/optimization/query-optimizer';
+import { Logic, Player, WinType } from '../../logic/logic';
+import { Constants } from '../../util/constants';
+import { canWinOnNextTurn, canWinOnNthTurn } from '../queries/ai-queries';
+import { QueryOptimizer } from '../queries/optimization/query-optimizer';
 import {
   preferFewerMoves,
   preferMovesNearCenter,
-} from './queries/optimization/rules';
+} from '../queries/optimization/rules';
+import { AiStrategy } from './ai-strategy';
 
 export class RuleBasedStrategy implements AiStrategy {
   private readonly random = new Math.RandomDataGenerator();

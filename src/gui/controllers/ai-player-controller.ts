@@ -1,5 +1,5 @@
-import { AiStrategy } from '../../ai/ai-strategy';
-import { Player, Logic } from '../../logic/logic';
+import { AiStrategy } from '../../ai/strategies/ai-strategy';
+import { Logic, Player } from '../../logic/logic';
 import { PlayerController } from './player-controller';
 
 export class AiPlayerController implements PlayerController {
