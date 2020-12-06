@@ -61,7 +61,7 @@ export class RuleBasedStrategy implements AiStrategy {
 
     // Play the most optimal first move.
     if (logic.getChipsPlayed(player) === 0) {
-      return 3;
+      return Constants.middleColumnIndex;
     }
 
     // Play an attacking move.

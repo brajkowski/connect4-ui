@@ -1,3 +1,4 @@
+import { Constants } from '../../../util/constants';
 import { QueryOptimizerRule } from './query-optimizer';
 
 export const preferFewerMoves: QueryOptimizerRule = (r, o) =>
@@ -5,4 +6,5 @@ export const preferFewerMoves: QueryOptimizerRule = (r, o) =>
 
 export const preferMovesNearCenter: QueryOptimizerRule = (r, o) =>
   r.moves?.length === o.moves?.length &&
-  Math.abs(3 - r.moves?.[0]) < Math.abs(3 - o.moves?.[0]);
+  Math.abs(Constants.middleColumnIndex - r.moves?.[0]) <
+    Math.abs(Constants.middleColumnIndex - o.moves?.[0]);
