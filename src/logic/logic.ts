@@ -5,6 +5,7 @@ export interface Logic {
   placeChip(player: Player, column: number): number;
   didWin(player: Player): boolean;
   boardIsFull(): boolean;
+  boardIsEmpty(): boolean;
   canPlaceChip(column: number): boolean;
   clear(): void;
   createCopy(): Logic;
