@@ -13,7 +13,6 @@ import { Player, WinType } from '../../../logic/logic';
 const logic = new BitboardLogic();
 const p1 = Player.One;
 const p2 = Player.Two;
-const optimizer = new QueryOptimizer([preferFewerMoves, preferMovesNearCenter]);
 
 describe('ai-queries', () => {
   beforeEach(() => {
@@ -51,27 +50,44 @@ describe('ai-queries', () => {
   });
 
   it('Can detect a winning move in 4 total moves for a blank game', () => {
-    const result = canWinOnNthTurn(p1, logic, 3, optimizer);
+    const result = canWinOnNthTurn(p1, logic, 3);
     expect(result.result).toBe(true);
   });
 
   it('Cannot detect a winning move in 3 total moves on a blank game', () => {
-    const result = canWinOnNthTurn(p1, logic, 2, optimizer);
+    const result = canWinOnNthTurn(p1, logic, 2);
     expect(result.result).toBe(false);
   });
 
-  it('Can chain together a winning sequence of N moves', () => {
-    const test = (player: Player, turns: number, moves: number[]) => {
-      const result = canWinOnNthTurn(player, logic, turns, optimizer);
-      expect(result).toEqual({ result: true, moves, type: WinType.Horizontal });
-    };
-    test(p1, 3, [3, 0, 1, 2]);
+  it('Returns proper win type when querying for canWinOnNthTurn', () => {
     logic.placeChip(p1, 3);
-    logic.placeChip(p1, 4);
-    test(p1, 1, [2, 5]);
+    logic.placeChip(p1, 3);
+    const result = canWinOnNthTurn(p1, logic, 1);
+    expect(result).toEqual({
+      result: true,
+      moves: [3, 3],
+      type: WinType.Vertical,
+    });
   });
 
-  it('Detects smaller winning sequences (n < N) if they exist', () => {
+  it('Can chain together a winning sequence of N moves', () => {
+    const test = (
+      player: Player,
+      turns: number,
+      moves: number[],
+      type: WinType
+    ) => {
+      const result = canWinOnNthTurn(player, logic, turns);
+      expect(result).toEqual({ result: true, moves, type: type });
+    };
+    test(p1, 3, [0, 0, 0, 0], WinType.Vertical);
+    logic.placeChip(p1, 3);
+    logic.placeChip(p1, 4);
+    test(p1, 1, [1, 2], WinType.Horizontal);
+  });
+
+  it('Can be optimized to find smaller winning sequences (n < N) if they exist', () => {
+    const optimizer = new QueryOptimizer([preferFewerMoves]);
     logic.placeChip(p1, 3);
     logic.placeChip(p1, 3);
     const result = canWinOnNthTurn(p1, logic, 3, optimizer);
@@ -82,7 +98,11 @@ describe('ai-queries', () => {
     });
   });
 
-  it('Prefers to play equivalent winning moves nearer to the center first', () => {
+  it('Can be optimized to favor equivalent winning moves nearer to the center first', () => {
+    const optimizer = new QueryOptimizer([
+      preferFewerMoves,
+      preferMovesNearCenter,
+    ]);
     logic.placeChip(p1, 3);
     logic.placeChip(p1, 4);
     const result = canWinOnNthTurn(p1, logic, 3, optimizer);
@@ -90,17 +110,6 @@ describe('ai-queries', () => {
       result: true,
       moves: [2, 1],
       type: WinType.Horizontal,
-    });
-  });
-
-  it('Returns proper win type when querying for canWinOnNthTurn', () => {
-    logic.placeChip(p1, 3);
-    logic.placeChip(p1, 3);
-    const result = canWinOnNthTurn(p1, logic, 1, optimizer);
-    expect(result).toEqual({
-      result: true,
-      moves: [3, 3],
-      type: WinType.Vertical,
     });
   });
 });
