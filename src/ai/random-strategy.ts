@@ -1,7 +1,7 @@
-import { Player, Logic } from '../logic/logic';
+import { Math } from 'phaser';
+import { Logic, Player } from '../logic/logic';
 import { Constants } from '../util/constants';
 import { AiStrategy } from './ai-strategy';
-import { Math } from 'phaser';
 
 export class RandomStrategy implements AiStrategy {
   private random = new Math.RandomDataGenerator();
