@@ -48,6 +48,11 @@ export class RuleBasedStrategy implements AiStrategy {
         return opponentWinsIn2.moves[0];
       }
     }
+
+    // Play the most optimal first move.
+    if (logic.getChipsPlayed(player) === 0) {
+      return 3;
+    }
     return this.randomFallback(logic);
   }
 
