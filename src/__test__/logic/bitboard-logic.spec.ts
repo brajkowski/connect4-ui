@@ -144,6 +144,20 @@ describe('bitboard-logic', () => {
     expect(logic.boardIsFull()).toBe(true);
   });
 
+  it('Detects when the board is not full', () => {
+    logic.placeChip(p1, 0);
+    expect(logic.boardIsFull()).toBe(false);
+  });
+
+  it('Detects when the board is empty', () => {
+    expect(logic.boardIsEmpty()).toBe(true);
+  });
+
+  it('Detects when the board is not empty', () => {
+    logic.placeChip(p1, 0);
+    expect(logic.boardIsEmpty()).toBe(false);
+  });
+
   it('Can provide a copy of itself', () => {
     logic.placeChip(p1, 0);
     logic.placeChip(p2, 1);

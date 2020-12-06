@@ -6,6 +6,7 @@ export interface Logic {
   didWin(player: Player): boolean;
   didWinWithType(player: Player): { result: boolean; type?: WinType };
   boardIsFull(): boolean;
+  boardIsEmpty(): boolean;
   canPlaceChip(column: number): boolean;
   clear(): void;
   createCopy(): Logic;
