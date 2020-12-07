@@ -1,6 +1,5 @@
 import { Math } from 'phaser';
 import { Logic, Player } from '../../logic/logic';
-import { Constants } from '../../util/constants';
 import { QueryOptimizer } from '../queries/optimization/query-optimizer';
 import {
   preferFewerMoves,
@@ -14,6 +13,7 @@ import {
   makeAttackingMoveSequence,
   makeOptimalOpeningMove,
   makeWinningMove,
+  randomFallback,
 } from './strategy-rules';
 
 export class RuleBasedStrategy implements AiStrategy {
@@ -43,20 +43,7 @@ export class RuleBasedStrategy implements AiStrategy {
       .orElse(blockOpponentWinningMoveSequence(1, this.optimizer))
       .orElse(makeOptimalOpeningMove)
       .orElse(makeAttackingMoveSequence(1, this.optimizer))
-      .finally(this.randomFallback(logic));
+      .finally(randomFallback(player, logic, this.optimizer));
     return s(player, logic);
-  }
-
-  private randomFallback(logic: Logic, tryToPrevent?: Set<number>): number {
-    const availableColumns: Set<number> = new Set();
-    for (let column = 0; column < Constants.columns; column++) {
-      if (logic.canPlaceChip(column)) availableColumns.add(column);
-    }
-    tryToPrevent?.forEach((move) => {
-      if (availableColumns.has(move) && availableColumns.size > 1) {
-        availableColumns.delete(move);
-      }
-    });
-    return this.random.pick(Array.from(availableColumns));
   }
 }

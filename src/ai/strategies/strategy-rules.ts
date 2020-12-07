@@ -1,8 +1,15 @@
-import { Player, WinType } from '../../logic/logic';
+import { Math } from 'phaser';
+import { Logic, Player, WinType } from '../../logic/logic';
 import { Constants } from '../../util/constants';
 import { canWinOnNextTurn, canWinOnNthTurn } from '../queries/ai-queries';
 import { QueryOptimizer } from '../queries/optimization/query-optimizer';
 import { StrategyRule } from './strategy-rule';
+
+const getOpponent = (player: Player): Player => {
+  return player === Player.One ? Player.Two : Player.One;
+};
+
+const random = new Math.RandomDataGenerator();
 
 export const makeWinningMove: StrategyRule = (p, l) => {
   const nextMoveWin = canWinOnNextTurn(p, l);
@@ -66,6 +73,29 @@ export const makeAttackingMoveSequence = (
   };
 };
 
-const getOpponent = (player: Player): Player => {
-  return player === Player.One ? Player.Two : Player.One;
-};
+export function randomFallback(
+  player: Player,
+  logic: Logic,
+  optimizer?: QueryOptimizer
+): number {
+  const avoid: Set<number> = new Set();
+  const opponentWin = canWinOnNthTurn(getOpponent(player), logic, 1, optimizer);
+  // If the opponent can win with stacking two pieces, ensure the first is not required only for stacking.
+  if (
+    opponentWin.result === true &&
+    opponentWin.moves?.[0] === opponentWin.moves?.[1] &&
+    opponentWin.type !== WinType.Vertical
+  ) {
+    avoid.add(opponentWin.moves?.[0]);
+  }
+  const availableColumns: Set<number> = new Set();
+  for (let column = 0; column < Constants.columns; column++) {
+    if (logic.canPlaceChip(column)) availableColumns.add(column);
+  }
+  avoid?.forEach((move) => {
+    if (availableColumns.has(move) && availableColumns.size > 1) {
+      availableColumns.delete(move);
+    }
+  });
+  return random.pick(Array.from(availableColumns));
+}
