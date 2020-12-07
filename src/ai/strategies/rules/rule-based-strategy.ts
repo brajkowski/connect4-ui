@@ -1,11 +1,11 @@
 import { Math } from 'phaser';
-import { Logic, Player } from '../../logic/logic';
-import { QueryOptimizer } from '../queries/optimization/query-optimizer';
+import { Logic, Player } from '../../../logic/logic';
+import { QueryOptimizer } from '../../queries/optimization/query-optimizer';
 import {
   preferFewerMoves,
   preferMovesNearCenter,
-} from '../queries/optimization/rules';
-import { AiStrategy } from './ai-strategy';
+} from '../../queries/optimization/rules';
+import { AiStrategy } from '../ai-strategy';
 import { StrategyRuleBuilder } from './strategy-rule';
 import {
   blockOpponentWinningMove,

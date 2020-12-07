@@ -1,5 +1,5 @@
-import { Logic, Player } from '../../logic/logic';
-import { QueryOptimizer } from '../queries/optimization/query-optimizer';
+import { Logic, Player } from '../../../logic/logic';
+import { QueryOptimizer } from '../../queries/optimization/query-optimizer';
 
 export interface StrategyRule {
   (player: Player, logic: Logic, optimizer?: QueryOptimizer): number;
