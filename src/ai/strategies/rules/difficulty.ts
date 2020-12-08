@@ -1,4 +1,4 @@
-import { Logic, Player } from '../../../logic/logic';
+import { Math } from 'phaser';
 import { QueryOptimizer } from '../../queries/optimization/query-optimizer';
 import {
   preferFewerMoves,
@@ -14,15 +14,32 @@ import {
   randomFallback,
 } from './strategy-rules';
 
-const hardOptimization: QueryOptimizer = new QueryOptimizer([
+const optimizer: QueryOptimizer = new QueryOptimizer([
   preferFewerMoves,
   preferMovesNearCenter,
 ]);
 
-export const hard: StrategyRule = (p: Player, l: Logic) =>
+const random = new Math.RandomDataGenerator();
+
+const noop: StrategyRule = () => null;
+
+export const easy: StrategyRule = (p, l) =>
+  new StrategyRuleBuilder(random.weightedPick([makeWinningMove, noop]))
+    .orElse(random.weightedPick([blockOpponentWinningMove, noop]))
+    .orElse(random.weightedPick([makeOptimalOpeningMove, noop]))
+    .finally(randomFallback(p, l, optimizer))(p, l);
+
+export const medium: StrategyRule = (p, l) =>
   new StrategyRuleBuilder(makeWinningMove)
     .orElse(blockOpponentWinningMove)
-    .orElse(blockOpponentWinningMoveSequence(1, hardOptimization))
+    .orElse(blockOpponentWinningMoveSequence(1, optimizer))
     .orElse(makeOptimalOpeningMove)
-    .orElse(makeAttackingMoveSequence(1, hardOptimization))
-    .finally(randomFallback(p, l, hardOptimization))(p, l);
+    .finally(randomFallback(p, l, optimizer))(p, l);
+
+export const hard: StrategyRule = (p, l) =>
+  new StrategyRuleBuilder(makeWinningMove)
+    .orElse(blockOpponentWinningMove)
+    .orElse(blockOpponentWinningMoveSequence(1, optimizer))
+    .orElse(makeOptimalOpeningMove)
+    .orElse(makeAttackingMoveSequence(1, optimizer))
+    .finally(randomFallback(p, l, optimizer))(p, l);
