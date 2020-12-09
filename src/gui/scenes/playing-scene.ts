@@ -1,10 +1,8 @@
 import { GameObjects, Math, Scene } from 'phaser';
 import { hard } from '../../ai/strategies/rules/difficulty';
 import { RuleBasedStrategy } from '../../ai/strategies/rules/rule-based-strategy';
-import aiController from '../../assets/ai_controller.png';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
-import humanController from '../../assets/human_controller.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';
 import { Player } from '../../logic/logic';
 import { IFrameEvents } from '../../util/iframe-events';
@@ -38,8 +36,8 @@ export class PlayingScene extends Scene {
   preload() {
     this.load.image('background', background);
     this.load.image('board', board);
-    this.load.image('humanController', humanController);
-    this.load.image('aiController', aiController);
+    this.player1controller.preload(this);
+    this.player2controller.preload(this);
     MoveIndicator.preload(this);
     RestartButton.preload(this);
     Chip.preload(this);
@@ -52,10 +50,18 @@ export class PlayingScene extends Scene {
       .setOrigin(0, 0)
       .setDepth(1);
     this.add
-      .image(globalScale(70), globalScale(524), 'humanController')
+      .image(
+        globalScale(70),
+        globalScale(524),
+        this.player1controller.getIconTextureKey()
+      )
       .setOrigin(0, 0);
     this.add
-      .image(globalScale(506), globalScale(524), 'aiController')
+      .image(
+        globalScale(506),
+        globalScale(524),
+        this.player2controller.getIconTextureKey()
+      )
       .setOrigin(0, 0);
     this.moveIndicator = new MoveIndicator(
       new Math.Vector2(globalScale(0), globalScale(25)),
@@ -145,9 +151,11 @@ export class PlayingScene extends Scene {
       this.score1Text.text = this.score1.toString();
       this.score2Text.text = this.score2.toString();
       this.moveIndicator.setVisibility(false);
-      this.activePlayer == Player.One
-        ? (this.winningText.text = 'You Win!')
-        : (this.winningText.text = "Aiden 'The AI' Won!");
+      const winnersName =
+        this.activePlayer == Player.One
+          ? this.player1controller.getControllerName()
+          : this.player2controller.getControllerName();
+      this.winningText.text = `${winnersName} Won!`;
       this.winningText.visible = true;
       return;
     }

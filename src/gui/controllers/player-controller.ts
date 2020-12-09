@@ -1,4 +1,4 @@
-import { Input } from 'phaser';
+import { Input, Scene } from 'phaser';
 import { Logic, Player } from '../../logic/logic';
 
 export interface PlayerController {
@@ -20,4 +20,20 @@ export interface PlayerController {
    * reject the promise created in the promptForMove() method.
    */
   cancelPromptForMove(): void;
+
+  /**
+   * Preload any required assets for the scene such as the controller icon.
+   * @param scene Scene that assets should be loaded to.
+   */
+  preload(scene: Scene): void;
+
+  /**
+   * Returns the texture key that the scene can use to render the icon.
+   */
+  getIconTextureKey(): string;
+
+  /**
+   * Returns the name of the entity that is responsible for the controller (ex: a username).
+   */
+  getControllerName(): string;
 }

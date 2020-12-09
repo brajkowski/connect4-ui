@@ -1,10 +1,13 @@
 import { Input } from 'phaser';
-import { Player, Logic } from '../../logic/logic';
+import humanController from '../../assets/human_controller.png';
+import { Logic, Player } from '../../logic/logic';
 import { ColumnMapper } from '../util/column-mapper';
 import { globalScale } from '../util/scale';
 import { PlayerController } from './player-controller';
 
 export class HumanPlayerController implements PlayerController {
+  private readonly controllerName = 'You';
+  private readonly iconTextureKey = 'humanControllerIcon';
   private readonly pointerUpEvent = 'pointerup';
   private input: Input.InputPlugin;
   private resolve: (value?: number | PromiseLike<number>) => void;
@@ -33,6 +36,18 @@ export class HumanPlayerController implements PlayerController {
     this.hasBeenPrompted = false;
     this.input.removeListener(this.pointerUpEvent, this.pointerUpListener);
     this.reject();
+  }
+
+  preload(scene: Phaser.Scene): void {
+    scene.load.image(this.iconTextureKey, humanController);
+  }
+
+  getIconTextureKey(): string {
+    return this.iconTextureKey;
+  }
+
+  getControllerName(): string {
+    return this.controllerName;
   }
 
   private onPointerUp(pointer: Input.Pointer) {

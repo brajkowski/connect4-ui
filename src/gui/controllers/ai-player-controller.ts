@@ -1,8 +1,11 @@
 import { AiStrategy } from '../../ai/strategies/ai-strategy';
+import aiController from '../../assets/ai_controller.png';
 import { Logic, Player } from '../../logic/logic';
 import { PlayerController } from './player-controller';
 
 export class AiPlayerController implements PlayerController {
+  private readonly iconTextureKey = 'aiControllerIcon';
+  private readonly controllerName = "Aiden 'The AI'";
   private reject: (reason?: any) => void;
   private hasBeenPrompted = false;
   private strategy: AiStrategy;
@@ -27,5 +30,17 @@ export class AiPlayerController implements PlayerController {
     if (!this.hasBeenPrompted) return;
     this.hasBeenPrompted = false;
     this.reject();
+  }
+
+  preload(scene: Phaser.Scene): void {
+    scene.load.image(this.iconTextureKey, aiController);
+  }
+
+  getIconTextureKey(): string {
+    return this.iconTextureKey;
+  }
+
+  getControllerName(): string {
+    return this.controllerName;
   }
 }
