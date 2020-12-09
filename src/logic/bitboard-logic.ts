@@ -23,12 +23,14 @@ export class BitboardLogic implements Logic {
         return this.p2;
     }
   }
+
   placeChip(player: Player, column: number): number {
     const row = this.findHighestIndexRow(column);
     this.getPlayerState(player).occupyPosition(row, column);
     this.chipCounts.set(player, this.chipCounts.get(player) + 1);
     return row;
   }
+
   didWin(player: Player): boolean {
     const state = this.getPlayerState(player).getRawState();
     return (
@@ -37,6 +39,7 @@ export class BitboardLogic implements Logic {
       this.checkDiagonalWin(state)
     );
   }
+
   didWinWithType(player: Player): { result: boolean; type?: WinType } {
     const state = this.getPlayerState(player).getRawState();
     if (this.checkVerticalWin(state)) {
@@ -50,25 +53,31 @@ export class BitboardLogic implements Logic {
     }
     return { result: false };
   }
+
   boardIsFull(): boolean {
     return this.getGameState().eq(bigInt(0x3ffffffffff));
   }
+
   boardIsEmpty(): boolean {
     return this.getGameState().eq(bigInt(0x0));
   }
+
   canPlaceChip(column: number): boolean {
     const state = new BitboardPlayerState(this.getGameState());
     return !state.occupiesPosition(0, column);
   }
+
   clear(): void {
     this.p1.clearAllPositions();
     this.p2.clearAllPositions();
     this.chipCounts.set(Player.One, 0);
     this.chipCounts.set(Player.Two, 0);
   }
+
   getGameState(): bigInt.BigInteger {
     return this.p1.getRawState().or(this.p2.getRawState());
   }
+
   createCopy(): BitboardLogic {
     const copy = new BitboardLogic();
     copy.p1 = new BitboardPlayerState(this.p1.getRawState());
@@ -77,9 +86,11 @@ export class BitboardLogic implements Logic {
     copy.chipCounts.set(Player.Two, this.chipCounts.get(Player.Two));
     return copy;
   }
+
   getChipsPlayed(player: Player): number {
     return this.chipCounts.get(player);
   }
+
   private findHighestIndexRow(column: number): number {
     const state = new BitboardPlayerState(this.getGameState());
     for (let i = Constants.maxRowIndex; i > 0; i--) {
@@ -88,6 +99,7 @@ export class BitboardLogic implements Logic {
     if (!state.occupiesPosition(0, column)) return 0;
     throw new FullColumnError(`Column ${column} is full`);
   }
+
   private checkVerticalWin(state: bigInt.BigInteger): boolean {
     const verticalMask = bigInt(0x204081);
     for (let i = 0; i < 21; i++) {
@@ -96,6 +108,7 @@ export class BitboardLogic implements Logic {
     }
     return false;
   }
+
   private checkHorizontalWin(state: bigInt.BigInteger): boolean {
     const horizontalMask = bigInt(0xf);
     for (let row = 0; row < Constants.rows; row++) {
@@ -109,6 +122,7 @@ export class BitboardLogic implements Logic {
     }
     return false;
   }
+
   private checkDiagonalWin(state: bigInt.BigInteger): boolean {
     const diagonalType1Mask = bigInt(0x208208);
     const diagonalType2Mask = bigInt(0x1010101);
