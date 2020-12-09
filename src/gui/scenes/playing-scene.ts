@@ -1,8 +1,10 @@
 import { GameObjects, Math, Scene } from 'phaser';
 import { hard } from '../../ai/strategies/rules/difficulty';
 import { RuleBasedStrategy } from '../../ai/strategies/rules/rule-based-strategy';
+import aiController from '../../assets/ai_controller.png';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
+import humanController from '../../assets/human_controller.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';
 import { Player } from '../../logic/logic';
 import { IFrameEvents } from '../../util/iframe-events';
@@ -36,6 +38,8 @@ export class PlayingScene extends Scene {
   preload() {
     this.load.image('background', background);
     this.load.image('board', board);
+    this.load.image('humanController', humanController);
+    this.load.image('aiController', aiController);
     MoveIndicator.preload(this);
     RestartButton.preload(this);
     Chip.preload(this);
@@ -47,6 +51,12 @@ export class PlayingScene extends Scene {
       .image(globalScale(50), globalScale(64), 'board')
       .setOrigin(0, 0)
       .setDepth(1);
+    this.add
+      .image(globalScale(70), globalScale(524), 'humanController')
+      .setOrigin(0, 0);
+    this.add
+      .image(globalScale(506), globalScale(524), 'aiController')
+      .setOrigin(0, 0);
     this.moveIndicator = new MoveIndicator(
       new Math.Vector2(globalScale(0), globalScale(25)),
       this
@@ -75,14 +85,15 @@ export class PlayingScene extends Scene {
       },
     });
     this.winningText = this.make.text({
-      x: globalScale(175),
-      y: globalScale(10),
+      x: globalScale(300),
+      y: globalScale(35),
       text: '',
       style: {
         font: `${globalScale(40)}px "Arial"`,
         color: 'white',
       },
     });
+    this.winningText.setOrigin(0.5);
     this.winningText.visible = false;
     this.drawText = this.make.text({
       x: globalScale(250),
@@ -134,7 +145,9 @@ export class PlayingScene extends Scene {
       this.score1Text.text = this.score1.toString();
       this.score2Text.text = this.score2.toString();
       this.moveIndicator.setVisibility(false);
-      this.winningText.text = `Player ${this.activePlayer + 1} Wins!`;
+      this.activePlayer == Player.One
+        ? (this.winningText.text = 'You Win!')
+        : (this.winningText.text = "Aiden 'The AI' Won!");
       this.winningText.visible = true;
       return;
     }
