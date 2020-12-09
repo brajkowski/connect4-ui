@@ -1,5 +1,6 @@
 import { GameObjects, Math, Scene } from 'phaser';
-import { RuleBasedStrategy } from '../../ai/strategies/rule-based-strategy';
+import { hard } from '../../ai/strategies/rules/difficulty';
+import { RuleBasedStrategy } from '../../ai/strategies/rules/rule-based-strategy';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';
@@ -29,7 +30,7 @@ export class PlayingScene extends Scene {
   private logic = new BitboardLogic();
   private player1controller = new HumanPlayerController();
   private player2controller = new AiPlayerController(
-    new RuleBasedStrategy(1500)
+    new RuleBasedStrategy(hard, 1500)
   );
 
   preload() {
