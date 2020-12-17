@@ -1,14 +1,14 @@
 import { AUTO, Game, Types } from 'phaser';
-import { PlayingScene } from './gui/scenes/playing-scene';
+import { MenuScene } from './gui/scenes/menu-scene';
 import { globalScale } from './gui/util/scale';
 
-const scene = new PlayingScene(null);
+const scene = new MenuScene(null);
 
 const config: Types.Core.GameConfig = {
   type: AUTO,
   width: globalScale(600),
   height: globalScale(600),
-  scene: scene,
+  scene,
   scale: {
     mode: Phaser.Scale.FIT,
   },
