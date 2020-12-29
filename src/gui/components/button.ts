@@ -10,6 +10,7 @@ export class Button {
 
   private static readonly passiveTexture = 'button';
   private static readonly activeTexture = 'button-pressed';
+  private readonly disabledTint = 0x777777;
   private readonly textOffsetX = 172;
   private readonly textoOffsetY = 68;
   private sprite: GameObjects.Sprite;
@@ -19,7 +20,8 @@ export class Button {
     x: number,
     y: number,
     text: string,
-    action?: () => void
+    action?: () => void,
+    disabled?: boolean
   ) {
     this.sprite = scene.add
       .sprite(x, y, Button.passiveTexture)
@@ -43,6 +45,21 @@ export class Button {
         },
       })
       .setOrigin(0.5);
+    if (disabled) {
+      this.disable();
+    }
+  }
+
+  enable() {
+    this.sprite.clearTint();
+    this.text.clearTint();
+    this.sprite.setInteractive({ useHandCursor: true });
+  }
+
+  disable() {
+    this.sprite.setTint(this.disabledTint);
+    this.text.setTint(this.disabledTint);
+    this.sprite.disableInteractive();
   }
 
   private activeState() {
