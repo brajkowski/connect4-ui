@@ -23,8 +23,13 @@ export class MenuScene extends Scene {
     new Button(this, globalScale(352), globalScale(400), 'Local', () =>
       this.scene.switch('local')
     );
-    new Button(this, globalScale(352), globalScale(460), 'Multiplayer', () =>
-      this.scene.switch('multi')
+    new Button(
+      this,
+      globalScale(352),
+      globalScale(460),
+      'Multiplayer',
+      null,
+      true
     );
   }
 
