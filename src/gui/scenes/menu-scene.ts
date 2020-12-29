@@ -2,7 +2,6 @@ import { Scene } from 'phaser';
 import background from '../../assets/menu_background.png';
 import { Button } from '../components/button';
 import { globalScale } from '../util/scale';
-import { PlayingScene } from './playing-scene';
 
 export class MenuScene extends Scene {
   preload() {
@@ -13,20 +12,19 @@ export class MenuScene extends Scene {
   create() {
     this.add.image(0, 0, 'menu-background').setOrigin(0, 0);
     new Button(this, globalScale(138), globalScale(400), 'Easy', () =>
-      console.log('Easy')
+      this.scene.switch('easy')
     );
     new Button(this, globalScale(138), globalScale(460), 'Medium', () =>
-      console.log('Medium')
+      this.scene.switch('medium')
     );
-    new Button(this, globalScale(138), globalScale(520), 'Hard', () => {
-      console.log('Hard');
-      this.scene.add('game', new PlayingScene(null), true);
-    });
+    new Button(this, globalScale(138), globalScale(520), 'Hard', () =>
+      this.scene.switch('hard')
+    );
     new Button(this, globalScale(352), globalScale(400), 'Local', () =>
-      console.log('Local')
+      this.scene.switch('local')
     );
     new Button(this, globalScale(352), globalScale(460), 'Multiplayer', () =>
-      console.log('Multiplayer')
+      this.scene.switch('multi')
     );
   }
 
