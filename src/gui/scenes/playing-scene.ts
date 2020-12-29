@@ -1,6 +1,4 @@
-import { GameObjects, Math, Scene } from 'phaser';
-import { hard } from '../../ai/strategies/rules/difficulty';
-import { RuleBasedStrategy } from '../../ai/strategies/rules/rule-based-strategy';
+import { GameObjects, Math, Scene, Types } from 'phaser';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
 import { BitboardLogic } from '../../logic/bitboard-logic';
@@ -11,8 +9,6 @@ import { BackButton } from '../components/back-button';
 import { Chip } from '../components/chip';
 import { MoveIndicator } from '../components/move-indicator';
 import { RestartButton } from '../components/restart-button';
-import { AiPlayerController } from '../controllers/ai-player-controller';
-import { HumanPlayerController } from '../controllers/human-player-controller';
 import { PlayerController } from '../controllers/player-controller';
 import { ColumnMapper } from '../util/column-mapper';
 import { globalScale } from '../util/scale';
@@ -29,10 +25,18 @@ export class PlayingScene extends Scene {
   private winningText: GameObjects.Text;
   private drawText: GameObjects.Text;
   private logic = new BitboardLogic();
-  private player1controller = new HumanPlayerController();
-  private player2controller = new AiPlayerController(
-    new RuleBasedStrategy(hard, 1500)
-  );
+  private player1controller: PlayerController;
+  private player2controller: PlayerController;
+
+  constructor(
+    config: Types.Scenes.SettingsConfig,
+    player1: PlayerController,
+    player2: PlayerController
+  ) {
+    super(config);
+    this.player1controller = player1;
+    this.player2controller = player2;
+  }
 
   preload() {
     this.load.image('background', background);
