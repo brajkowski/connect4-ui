@@ -48,7 +48,7 @@ export class PlayingScene extends Scene {
   create() {
     this.add.image(0, 0, 'background').setOrigin(0, 0);
     new BackButton(this, globalScale(12.5), globalScale(12.5), () =>
-      console.log('Menu')
+      this.scene.switch('menu')
     );
     this.add
       .image(globalScale(50), globalScale(64), 'board')
