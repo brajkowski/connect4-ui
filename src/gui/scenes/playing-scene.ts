@@ -7,6 +7,7 @@ import { BitboardLogic } from '../../logic/bitboard-logic';
 import { Player } from '../../logic/logic';
 import { IFrameEvents } from '../../util/iframe-events';
 import { noop } from '../../util/no-op';
+import { BackButton } from '../components/back-button';
 import { Chip } from '../components/chip';
 import { MoveIndicator } from '../components/move-indicator';
 import { RestartButton } from '../components/restart-button';
@@ -41,10 +42,14 @@ export class PlayingScene extends Scene {
     MoveIndicator.preload(this);
     RestartButton.preload(this);
     Chip.preload(this);
+    BackButton.preload(this);
   }
 
   create() {
     this.add.image(0, 0, 'background').setOrigin(0, 0);
+    new BackButton(this, globalScale(12.5), globalScale(12.5), () =>
+      console.log('Menu')
+    );
     this.add
       .image(globalScale(50), globalScale(64), 'board')
       .setOrigin(0, 0)
