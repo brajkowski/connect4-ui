@@ -1,3 +1,4 @@
+import { BitboardLogic, Player, WinType } from '@brajkowski/connect4-web-logic';
 import {
   canWinOnNextTurn,
   canWinOnNthTurn,
@@ -7,8 +8,6 @@ import {
   preferFewerMoves,
   preferMovesNearCenter,
 } from '../../../ai/queries/optimization/rules';
-import { BitboardLogic } from '../../../logic/bitboard-logic';
-import { Player, WinType } from '../../../logic/logic';
 
 const logic = new BitboardLogic();
 const p1 = Player.One;

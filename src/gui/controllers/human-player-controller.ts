@@ -1,6 +1,6 @@
+import { Logic, Player } from '@brajkowski/connect4-web-logic';
 import { Input } from 'phaser';
 import humanController from '../../assets/human_controller.png';
-import { Logic, Player } from '../../logic/logic';
 import { ColumnMapper } from '../util/column-mapper';
 import { globalScale } from '../util/scale';
 import { PlayerController } from './player-controller';

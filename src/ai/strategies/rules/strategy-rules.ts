@@ -1,6 +1,10 @@
+import {
+  Constants,
+  Logic,
+  Player,
+  WinType,
+} from '@brajkowski/connect4-web-logic';
 import { Math } from 'phaser';
-import { Logic, Player, WinType } from '../../../logic/logic';
-import { Constants } from '../../../util/constants';
 import { canWinOnNextTurn, canWinOnNthTurn } from '../../queries/ai-queries';
 import { QueryOptimizer } from '../../queries/optimization/query-optimizer';
 import { StrategyRule } from './strategy-rule';

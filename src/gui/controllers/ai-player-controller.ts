@@ -1,6 +1,6 @@
+import { Logic, Player } from '@brajkowski/connect4-web-logic';
 import { AiStrategy } from '../../ai/strategies/ai-strategy';
 import aiController from '../../assets/ai_controller.png';
-import { Logic, Player } from '../../logic/logic';
 import { PlayerController } from './player-controller';
 
 export class AiPlayerController implements PlayerController {

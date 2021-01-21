@@ -1,6 +1,5 @@
+import { Constants, Logic, Player } from '@brajkowski/connect4-web-logic';
 import { Math } from 'phaser';
-import { Logic, Player } from '../../logic/logic';
-import { Constants } from '../../util/constants';
 import { AiStrategy } from './ai-strategy';
 
 export class RandomStrategy implements AiStrategy {

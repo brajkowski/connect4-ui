@@ -1,10 +1,10 @@
+import { Player } from '@brajkowski/connect4-web-logic';
 import { GameObjects, Scene } from 'phaser';
-import { Player } from '../../logic/logic';
 import chipPrimary from '../../assets/chip_primary.png';
 import chipSecondary from '../../assets/chip_secondary.png';
-import click1 from '../../assets/click.ogg';
 import click2 from '../../assets/click.m4a';
 import click3 from '../../assets/click.mp3';
+import click1 from '../../assets/click.ogg';
 import click4 from '../../assets/click.wav';
 import { ChipPositionMapper } from '../util/chip-position-mapper';
 import { globalScale } from '../util/scale';

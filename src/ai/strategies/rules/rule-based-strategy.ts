@@ -1,4 +1,4 @@
-import { Logic, Player } from '../../../logic/logic';
+import { Logic, Player } from '@brajkowski/connect4-web-logic';
 import { AiStrategy } from '../ai-strategy';
 import { StrategyRule } from './strategy-rule';
 

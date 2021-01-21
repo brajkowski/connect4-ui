@@ -1,8 +1,7 @@
+import { BitboardLogic, Player } from '@brajkowski/connect4-web-logic';
 import { GameObjects, Math, Scene, Types } from 'phaser';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';
-import { BitboardLogic } from '../../logic/bitboard-logic';
-import { Player } from '../../logic/logic';
 import { IFrameEvents } from '../../util/iframe-events';
 import { noop } from '../../util/no-op';
 import { BackButton } from '../components/back-button';
