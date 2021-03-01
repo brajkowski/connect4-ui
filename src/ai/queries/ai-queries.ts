@@ -1,9 +1,4 @@
-import {
-  Constants,
-  Logic,
-  Player,
-  WinType,
-} from '@brajkowski/connect4-web-logic';
+import { Constants, Logic, Player, WinType } from '@brajkowski/connect4-logic';
 import { QueryOptimizer } from './optimization/query-optimizer';
 
 export interface AiQueryResult {

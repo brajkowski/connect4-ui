@@ -1,4 +1,4 @@
-import { Constants, Logic, Player } from '@brajkowski/connect4-web-logic';
+import { Constants, Logic, Player } from '@brajkowski/connect4-logic';
 import { Math } from 'phaser';
 import { AiStrategy } from './ai-strategy';
 

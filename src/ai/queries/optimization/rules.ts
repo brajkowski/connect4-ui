@@ -1,4 +1,4 @@
-import { Constants } from '@brajkowski/connect4-web-logic';
+import { Constants } from '@brajkowski/connect4-logic';
 import { QueryOptimizerRule } from './query-optimizer';
 
 export const preferFewerMoves: QueryOptimizerRule = (r, o) =>

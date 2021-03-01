@@ -1,4 +1,4 @@
-import { BitboardLogic, Player } from '@brajkowski/connect4-web-logic';
+import { BitboardLogic, Player } from '@brajkowski/connect4-logic';
 import { GameObjects, Math, Scene, Types } from 'phaser';
 import background from '../../assets/background.png';
 import board from '../../assets/board.png';

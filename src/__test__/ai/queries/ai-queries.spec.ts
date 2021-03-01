@@ -1,4 +1,4 @@
-import { BitboardLogic, Player, WinType } from '@brajkowski/connect4-web-logic';
+import { BitboardLogic, Player, WinType } from '@brajkowski/connect4-logic';
 import {
   canWinOnNextTurn,
   canWinOnNthTurn,

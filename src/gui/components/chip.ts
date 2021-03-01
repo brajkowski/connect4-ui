@@ -1,4 +1,4 @@
-import { Player } from '@brajkowski/connect4-web-logic';
+import { Player } from '@brajkowski/connect4-logic';
 import { GameObjects, Scene } from 'phaser';
 import chipPrimary from '../../assets/chip_primary.png';
 import chipSecondary from '../../assets/chip_secondary.png';
