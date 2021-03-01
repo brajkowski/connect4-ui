@@ -2,12 +2,12 @@ import { BitboardLogic, Player, WinType } from '@brajkowski/connect4-logic';
 import {
   canWinOnNextTurn,
   canWinOnNthTurn,
-} from '../../../ai/queries/ai-queries';
-import { QueryOptimizer } from '../../../ai/queries/optimization/query-optimizer';
+} from '../../../src/ai/queries/ai-queries';
+import { QueryOptimizer } from '../../../src/ai/queries/optimization/query-optimizer';
 import {
   preferFewerMoves,
   preferMovesNearCenter,
-} from '../../../ai/queries/optimization/rules';
+} from '../../../src/ai/queries/optimization/rules';
 
 const logic = new BitboardLogic();
 const p1 = Player.One;

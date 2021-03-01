@@ -1,8 +1,8 @@
-import { AiQueryResult } from '../../../../ai/queries/ai-queries';
+import { AiQueryResult } from '../../../../src/ai/queries/ai-queries';
 import {
   QueryOptimizer,
   QueryOptimizerRule,
-} from '../../../../ai/queries/optimization/query-optimizer';
+} from '../../../../src/ai/queries/optimization/query-optimizer';
 
 const trueRule: QueryOptimizerRule = (r, o) => true;
 const falseRule: QueryOptimizerRule = (r, o) => false;
