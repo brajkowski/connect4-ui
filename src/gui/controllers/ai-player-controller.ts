@@ -1,4 +1,4 @@
-import { Logic, Player } from '@brajkowski/connect4-web-logic';
+import { Logic, Player } from '@brajkowski/connect4-logic';
 import { AiStrategy } from '../../ai/strategies/ai-strategy';
 import aiController from '../../assets/ai_controller.png';
 import { PlayerController } from './player-controller';

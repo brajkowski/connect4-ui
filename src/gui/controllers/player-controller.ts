@@ -1,4 +1,4 @@
-import { Logic, Player } from '@brajkowski/connect4-web-logic';
+import { Logic, Player } from '@brajkowski/connect4-logic';
 import { Input, Scene } from 'phaser';
 
 export interface PlayerController {

@@ -1,4 +1,4 @@
-import { Logic, Player } from '@brajkowski/connect4-web-logic';
+import { Logic, Player } from '@brajkowski/connect4-logic';
 import { Input } from 'phaser';
 import humanController from '../../assets/human_controller.png';
 import { ColumnMapper } from '../util/column-mapper';
