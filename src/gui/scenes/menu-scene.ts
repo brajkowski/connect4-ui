@@ -27,9 +27,15 @@ export class MenuScene extends Scene {
       this,
       globalScale(352),
       globalScale(460),
-      'Multiplayer',
-      null,
-      true
+      'Multiplayer (Create)',
+      () => this.scene.switch('mp-create')
+    );
+    new Button(
+      this,
+      globalScale(352),
+      globalScale(520),
+      'Multiplayer (Join)',
+      () => this.scene.switch('mp-join')
     );
   }
 
