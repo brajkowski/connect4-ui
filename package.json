@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@brajkowski/connect4-logic": "^1.0.0",
+    "@brajkowski/connect4-multiplayer-client": "^1.0.0-beta.4",
     "big-integer": "^1.6.48",
     "express": "^4.17.1"
   }
