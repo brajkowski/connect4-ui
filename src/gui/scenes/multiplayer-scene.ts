@@ -63,12 +63,15 @@ export class MultiplayerPlayingScene extends PlayingScene {
     this.opponentDisplayNameText = this.make.text({
       x: globalScale(440),
       y: globalScale(582),
-      text: 'Opponent',
+      text: 'Waiting for opponent to join...',
       style: {
         font: `italic ${globalScale(10)}px "Arial"`,
         color: 'white',
       },
     });
     this.opponentDisplayNameText.setOrigin(0.5);
+    this.client.onOpponentJoin((opponentDisplayName) =>
+      this.opponentDisplayNameText.setText(opponentDisplayName)
+    );
   }
 }
