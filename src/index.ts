@@ -38,7 +38,6 @@ const createMultiplayer = new MultiplayerPlayingScene(
   { key: 'mp-create' },
   new MultiplayerPlayerController(client),
   new MultiplayerOpponentController(client),
-  'Creator',
   client,
   false
 );
@@ -46,7 +45,6 @@ const joinMultiplayer = new MultiplayerPlayingScene(
   { key: 'mp-join' },
   new MultiplayerPlayerController(client),
   new MultiplayerOpponentController(client),
-  'Joiner',
   client,
   true
 );

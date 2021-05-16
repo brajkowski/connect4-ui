@@ -1,16 +1,20 @@
 import { Player } from '@brajkowski/connect4-logic';
 import { Connect4Client } from '@brajkowski/connect4-multiplayer-client';
-import { Types } from 'phaser';
+import { GameObjects, Types } from 'phaser';
 import { multiplayerServer } from '../..';
 import { PlayerController } from '../controllers/player-controller';
+import { globalScale } from '../util/scale';
 import { PlayingScene } from './playing-scene';
 
 export class MultiplayerPlayingScene extends PlayingScene {
+  private displayName: string;
+  private displayNameText: GameObjects.Text;
+  private opponentDisplayNameText: GameObjects.Text;
+
   constructor(
     config: Types.Scenes.SettingsConfig,
     player1: PlayerController,
     player2: PlayerController,
-    private displayName: string,
     private client: Connect4Client,
     private joinSession: boolean
   ) {
@@ -23,7 +27,6 @@ export class MultiplayerPlayingScene extends PlayingScene {
   }
 
   init(data: { displayName: string }) {
-    console.log('Setting display name:', data.displayName);
     this.displayName = data.displayName;
   }
 
@@ -47,6 +50,25 @@ export class MultiplayerPlayingScene extends PlayingScene {
       }
     }, 500);
     super.create();
-    this.restartButton = null;
+    this.displayNameText = this.make.text({
+      x: globalScale(160),
+      y: globalScale(582),
+      text: this.displayName,
+      style: {
+        font: `italic ${globalScale(10)}px "Arial"`,
+        color: 'white',
+      },
+    });
+    this.displayNameText.setOrigin(0.5);
+    this.opponentDisplayNameText = this.make.text({
+      x: globalScale(440),
+      y: globalScale(582),
+      text: 'Opponent',
+      style: {
+        font: `italic ${globalScale(10)}px "Arial"`,
+        color: 'white',
+      },
+    });
+    this.opponentDisplayNameText.setOrigin(0.5);
   }
 }
