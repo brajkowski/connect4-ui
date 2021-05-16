@@ -66,7 +66,12 @@ const config: Types.Core.GameConfig = {
   ],
   scale: {
     mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
   },
+  dom: {
+    createContainer: true,
+  },
+  parent: 'canvas-parent',
 };
 
 const game = new Game(config);
