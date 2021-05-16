@@ -52,7 +52,7 @@ export class PlayingScene extends Scene {
     this.restartButton = new RestartButton(
       new Math.Vector2(globalScale(276), globalScale(516)),
       this,
-      this.restart.bind(this)
+      () => this.restart(this.chooseRandomPlayer)
     );
   }
 
@@ -196,19 +196,22 @@ export class PlayingScene extends Scene {
     this.restartButton?.triggerAnimation();
   }
 
-  protected restart() {
+  protected restart(chooseStartingPlayer: () => number) {
     this.winningText.visible = false;
     this.drawText.visible = false;
     this.logic.clear();
     this.chips.forEach((c) => c.destroy());
     this.chips = new Array<Chip>();
-    const random = new Math.RandomDataGenerator();
-    random.integerInRange(0, 1);
-    this.activePlayer = random.integerInRange(0, 1);
+    this.activePlayer = chooseStartingPlayer();
     this.restartButton?.reinitialize(this.activePlayer === Player.One);
     this.moveIndicator.setVisibility(true);
     this.player1controller.cancelPromptForMove();
     this.player2controller.cancelPromptForMove();
     this.beginActivePlayerTurn();
+  }
+
+  protected chooseRandomPlayer(): number {
+    const random = new Math.RandomDataGenerator();
+    return random.integerInRange(0, 1);
   }
 }
