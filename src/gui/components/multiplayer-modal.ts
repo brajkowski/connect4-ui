@@ -70,6 +70,7 @@ export class MultiplayerModal {
   }
 
   show(): void {
+    if (this.dom.visible) return;
     this.dom.visible = true;
     setTimeout(() => {
       this.clickOutListener = (event: MouseEvent) => {
@@ -81,13 +82,22 @@ export class MultiplayerModal {
         'click',
         this.clickOutListener
       );
+      this.dom.parent.parentNode.addEventListener(
+        'touchend',
+        this.clickOutListener
+      );
     });
   }
 
   hide(): void {
+    if (!this.dom.visible) return;
     this.dom.visible = false;
     this.dom.parent.parentNode.removeEventListener(
       'click',
+      this.clickOutListener
+    );
+    this.dom.parent.parentNode.removeEventListener(
+      'touchend',
       this.clickOutListener
     );
   }
