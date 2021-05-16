@@ -18,8 +18,8 @@ export class MenuScene extends Scene {
       this,
       900,
       900,
-      () => this.scene.switch('mp-join'),
-      () => this.scene.switch('mp-create')
+      (displayName) => this.scene.start('mp-join', { displayName }),
+      (displayName) => this.scene.start('mp-create', { displayName })
     );
     new Button(this, globalScale(138), globalScale(400), 'Easy', () =>
       this.scene.switch('easy')

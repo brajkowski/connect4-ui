@@ -29,15 +29,26 @@ export class MultiplayerModal {
         box-shadow: 0px 0px 10px black;
         cursor: pointer;
         margin: 20px;
-        margin-top:100px;
+        margin-top:25px;
       }
       .modal-button:active {
         background-color: #303030;
+      }
+      input {
+        width: 800px;
+        height: 125px;
+        border-radius: 25px;
+        border: none;
+        font-size: 50px;
+        font-family: Arial;
+        padding: 0px 25px;
+        margin-top: 25px;
       }
     </style>
     <div style="height: 100%; width: 100%"></div>
     <div class="modal">
       <span class="modal-text">Create or join a multiplayer session:</span>
+        <input id="displayName" type="text" placeholder="Your Display Name">
         <button id="join" type="button" class="modal-button">Join</button>
         <button id="create" type="button" class="modal-button">Create</button>
     </div>
@@ -49,8 +60,8 @@ export class MultiplayerModal {
     scene: Scene,
     x: number,
     y: number,
-    joinAction?: () => void,
-    createAction?: () => void
+    joinAction?: (displayName: string) => void,
+    createAction?: (displayName: string) => void
   ) {
     this.dom = scene.add.dom(x, y);
     this.dom.createFromHTML(this.html);
@@ -82,18 +93,21 @@ export class MultiplayerModal {
   }
 
   private assignButtonListeners(
-    joinAction?: () => any,
-    createAction?: () => any
+    joinAction?: (displayName: string) => any,
+    createAction?: (displayName: string) => any
   ): void {
     const joinButton = this.dom.getChildByID('join') as HTMLButtonElement;
     const createButton = this.dom.getChildByID('create') as HTMLButtonElement;
+    const displayNameInput = this.dom.getChildByID(
+      'displayName'
+    ) as HTMLInputElement;
     joinButton.addEventListener('click', () => {
       this.hide();
-      joinAction?.();
+      joinAction?.(displayNameInput.value);
     });
     createButton.addEventListener('click', () => {
       this.hide();
-      createAction?.();
+      createAction?.(displayNameInput.value);
     });
   }
 }

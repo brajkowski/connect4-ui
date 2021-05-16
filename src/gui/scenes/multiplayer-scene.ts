@@ -10,7 +10,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
     config: Types.Scenes.SettingsConfig,
     player1: PlayerController,
     player2: PlayerController,
-    private username: string,
+    private displayName: string,
     private client: Connect4Client,
     private joinSession: boolean
   ) {
@@ -22,6 +22,11 @@ export class MultiplayerPlayingScene extends PlayingScene {
     // Overridden so that the restart button is not displayed.
   }
 
+  init(data: { displayName: string }) {
+    console.log('Setting display name:', data.displayName);
+    this.displayName = data.displayName;
+  }
+
   create() {
     this.client.open(multiplayerServer);
     if (this.joinSession) {
@@ -30,11 +35,14 @@ export class MultiplayerPlayingScene extends PlayingScene {
     setTimeout(() => {
       this.client.onOpponentMove((column) => super.dropChip(column));
       if (this.joinSession) {
-        this.client.joinSession(window.prompt('Join session:'), this.username);
+        this.client.joinSession(
+          window.prompt('Join session:'),
+          this.displayName
+        );
       } else {
-        this.client.createSession(this.username);
+        this.client.createSession(this.displayName);
         this.client.onSessionCreated((session) =>
-          console.log(`Session created: ${session}`)
+          console.log('Session created:', session)
         );
       }
     }, 500);
