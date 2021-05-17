@@ -1,7 +1,8 @@
-import { GameObjects, Scene } from 'phaser';
+import { Scene } from 'phaser';
+import { Modal } from './modal';
 
-export class MultiplayerModal {
-  private readonly html: string = `
+export class MultiplayerModal extends Modal {
+  private static readonly html: string = `
     <style>
       .modal {
         text-align: center;
@@ -45,7 +46,6 @@ export class MultiplayerModal {
         margin-top: 25px;
       }
     </style>
-    <div style="height: 100%; width: 100%"></div>
     <div class="modal">
       <span class="modal-text">Create or join a multiplayer session:</span>
         <input id="displayName" type="text" placeholder="Your Display Name">
@@ -53,8 +53,6 @@ export class MultiplayerModal {
         <button id="create" type="button" class="modal-button">Create</button>
     </div>
   `;
-  private dom: GameObjects.DOMElement;
-  private clickOutListener: (event: MouseEvent) => any;
 
   constructor(
     scene: Scene,
@@ -63,43 +61,12 @@ export class MultiplayerModal {
     joinAction?: (displayName: string) => void,
     createAction?: (displayName: string) => void
   ) {
-    this.dom = scene.add.dom(x, y);
-    this.dom.createFromHTML(this.html);
-    this.dom.visible = false;
+    super(scene, x, y);
     this.assignButtonListeners(joinAction, createAction);
   }
 
-  show(): void {
-    if (this.dom.visible) return;
-    this.dom.visible = true;
-    setTimeout(() => {
-      this.clickOutListener = (event: MouseEvent) => {
-        if (event.target instanceof HTMLCanvasElement) {
-          this.hide();
-        }
-      };
-      this.dom.parent.parentNode.addEventListener(
-        'click',
-        this.clickOutListener
-      );
-      this.dom.parent.parentNode.addEventListener(
-        'touchend',
-        this.clickOutListener
-      );
-    });
-  }
-
-  hide(): void {
-    if (!this.dom.visible) return;
-    this.dom.visible = false;
-    this.dom.parent.parentNode.removeEventListener(
-      'click',
-      this.clickOutListener
-    );
-    this.dom.parent.parentNode.removeEventListener(
-      'touchend',
-      this.clickOutListener
-    );
+  protected getHTML(): string {
+    return MultiplayerModal.html;
   }
 
   private assignButtonListeners(
