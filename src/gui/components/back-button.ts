@@ -11,7 +11,10 @@ export class BackButton {
   private static readonly passiveTexture = 'back';
   private static readonly activeTexture = 'back-pressed';
   private sprite: GameObjects.Sprite;
+  private action?: () => void;
+
   constructor(scene: Scene, x: number, y: number, action?: () => void) {
+    this.action = action;
     this.sprite = scene.add
       .sprite(x, y, BackButton.passiveTexture)
       .setOrigin(0, 0)
@@ -20,8 +23,12 @@ export class BackButton {
       .on('pointerout', () => this.passiveState())
       .on('pointerup', () => {
         this.passiveState();
-        action?.();
+        this.action?.();
       });
+  }
+
+  setAction(action: () => void): void {
+    this.action = action;
   }
 
   private activeState() {

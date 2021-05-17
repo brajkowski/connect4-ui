@@ -26,6 +26,7 @@ export class PlayingScene extends Scene {
   protected logic = new BitboardLogic();
   protected player1controller: PlayerController;
   protected player2controller: PlayerController;
+  protected backButton: BackButton;
 
   constructor(
     config: Types.Scenes.SettingsConfig,
@@ -58,8 +59,11 @@ export class PlayingScene extends Scene {
 
   create() {
     this.add.image(0, 0, 'background').setOrigin(0, 0);
-    new BackButton(this, globalScale(12.5), globalScale(12.5), () =>
-      this.scene.switch('menu')
+    this.backButton = new BackButton(
+      this,
+      globalScale(12.5),
+      globalScale(12.5),
+      () => this.scene.switch('menu')
     );
     this.add
       .image(globalScale(50), globalScale(64), 'board')
