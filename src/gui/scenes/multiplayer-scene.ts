@@ -86,12 +86,20 @@ export class MultiplayerPlayingScene extends PlayingScene {
       this.client.onJoinedSession((opponentDisplayName) => {
         this.opponentDisplayNameText.setText(opponentDisplayName);
         this.client.onSessionNotFound(() => alert('Session corrupted'));
+        this.backButton.setAction(() => {
+          this.client.quit();
+          this.scene.switch('menu');
+        });
       });
     } else {
       this.client.createSession(this.displayName);
-      this.client.onSessionCreated((session) =>
-        console.log('Session created:', session)
-      );
+      this.client.onSessionCreated((session) => {
+        console.log('Session created:', session);
+        this.backButton.setAction(() => {
+          this.client.quit();
+          this.scene.switch('menu');
+        });
+      });
     }
   }
 
@@ -100,7 +108,6 @@ export class MultiplayerPlayingScene extends PlayingScene {
     this.client.onGameRestart((thisClientStartsFirst) => {
       super.restart(() => (thisClientStartsFirst ? Player.One : Player.Two));
     });
-    this.client.onClose(() => alert('Socket closed'));
     this.client.onOpponentQuit(() => alert('Opponent has left'));
     this.client.onSessionEnded(() => alert('The session has ended'));
   }
