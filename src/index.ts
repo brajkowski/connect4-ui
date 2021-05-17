@@ -11,7 +11,7 @@ import { MultiplayerPlayingScene } from './gui/scenes/multiplayer-scene';
 import { PlayingScene } from './gui/scenes/playing-scene';
 import { globalScale } from './gui/util/scale';
 
-export const multiplayerServer = 'ws://br-connect-4-mp-server.herokuapp.com';
+export const multiplayerServer = 'wss://br-connect-4-mp-server.herokuapp.com';
 const client: Connect4Client = new Connect4Client();
 const menu = new MenuScene({ key: 'menu' });
 const easyScene = new PlayingScene(
