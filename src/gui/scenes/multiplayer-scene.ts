@@ -67,10 +67,26 @@ export class MultiplayerPlayingScene extends PlayingScene {
 
   private setupSession() {
     if (this.joinSession) {
-      this.client.joinSession(window.prompt('Join session:'), this.displayName);
-      this.client.onJoinedSession((opponentDisplayName) =>
-        this.opponentDisplayNameText.setText(opponentDisplayName)
-      );
+      this.client.onSessionNotFound(() => {
+        const session = window.prompt(
+          'Session could not be found.\nPlease check the session code and try again:'
+        );
+        if (session == null) {
+          this.scene.switch('menu');
+          return;
+        }
+        this.client.joinSession(session, this.displayName);
+      });
+      const session = window.prompt('Join session:');
+      if (session == null) {
+        this.scene.switch('menu');
+        return;
+      }
+      this.client.joinSession(session, this.displayName);
+      this.client.onJoinedSession((opponentDisplayName) => {
+        this.opponentDisplayNameText.setText(opponentDisplayName);
+        this.client.onSessionNotFound(() => alert('Session corrupted'));
+      });
     } else {
       this.client.createSession(this.displayName);
       this.client.onSessionCreated((session) =>
