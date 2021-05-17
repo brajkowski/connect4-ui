@@ -2,6 +2,7 @@ import { Player } from '@brajkowski/connect4-logic';
 import { Connect4Client } from '@brajkowski/connect4-multiplayer-client';
 import { GameObjects, Types } from 'phaser';
 import { multiplayerServer } from '../../index';
+import { SessionModal } from '../components/session-modal';
 import { PlayerController } from '../controllers/player-controller';
 import { globalScale } from '../util/scale';
 import { PlayingScene } from './playing-scene';
@@ -10,6 +11,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
   private displayName: string;
   private displayNameText: GameObjects.Text;
   private opponentDisplayNameText: GameObjects.Text;
+  private sessionModal: SessionModal;
 
   constructor(
     config: Types.Scenes.SettingsConfig,
@@ -31,6 +33,10 @@ export class MultiplayerPlayingScene extends PlayingScene {
   }
 
   create() {
+    if (this.sessionModal) {
+      this.sessionModal.destroy();
+    }
+    this.sessionModal = new SessionModal(this, 900, 900);
     this.client.open(multiplayerServer);
     this.client.onOpen(() => {
       this.setupSession();
@@ -39,6 +45,8 @@ export class MultiplayerPlayingScene extends PlayingScene {
     super.create();
     if (this.joinSession) {
       this.activePlayer = Player.Two;
+    } else {
+      this.sessionModal.show();
     }
     this.displayNameText = this.make.text({
       x: globalScale(160),
@@ -62,6 +70,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
     this.opponentDisplayNameText.setOrigin(0.5);
     this.client.onOpponentJoin((opponentDisplayName) => {
       this.opponentDisplayNameText.setText(opponentDisplayName);
+      this.sessionModal.hide();
       this.beginActivePlayerTurn();
     });
   }
@@ -100,7 +109,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
     } else {
       this.client.createSession(this.displayName);
       this.client.onSessionCreated((session) => {
-        console.log('Session created:', session);
+        this.sessionModal.sessionCreated(session);
         this.backButton.setAction(() => {
           this.client.quit();
           this.scene.switch('menu');
