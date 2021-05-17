@@ -18,7 +18,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
     private client: Connect4Client,
     private joinSession: boolean
   ) {
-    super(config, player1, player2);
+    super(config, player1, player2, true);
     this.client = client;
   }
 
@@ -31,15 +31,15 @@ export class MultiplayerPlayingScene extends PlayingScene {
   }
 
   create() {
-    if (this.joinSession) {
-      this.activePlayer = Player.Two;
-    }
     this.client.open(multiplayerServer);
     this.client.onOpen(() => {
       this.setupSession();
       this.setupClientHandlers();
     });
     super.create();
+    if (this.joinSession) {
+      this.activePlayer = Player.Two;
+    }
     this.displayNameText = this.make.text({
       x: globalScale(160),
       y: globalScale(582),
@@ -60,9 +60,10 @@ export class MultiplayerPlayingScene extends PlayingScene {
       },
     });
     this.opponentDisplayNameText.setOrigin(0.5);
-    this.client.onOpponentJoin((opponentDisplayName) =>
-      this.opponentDisplayNameText.setText(opponentDisplayName)
-    );
+    this.client.onOpponentJoin((opponentDisplayName) => {
+      this.opponentDisplayNameText.setText(opponentDisplayName);
+      this.beginActivePlayerTurn();
+    });
   }
 
   private setupSession() {
@@ -85,6 +86,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
       this.client.joinSession(session, this.displayName);
       this.client.onJoinedSession((opponentDisplayName) => {
         this.opponentDisplayNameText.setText(opponentDisplayName);
+        this.beginActivePlayerTurn();
         this.client.onSessionNotFound(() => alert('Session corrupted'));
         this.backButton.setAction(() => {
           this.client.quit();
