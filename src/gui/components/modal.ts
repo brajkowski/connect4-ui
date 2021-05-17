@@ -47,4 +47,8 @@ export abstract class Modal {
       this.clickOutListener
     );
   }
+
+  destroy(): void {
+    this.dom.destroy();
+  }
 }
