@@ -15,27 +15,30 @@ import { globalScale } from '../util/scale';
 export class PlayingScene extends Scene {
   protected moveIndicator: MoveIndicator;
   protected restartButton?: RestartButton;
-  protected chips = new Array<Chip>();
-  protected activePlayer = Player.One;
-  protected score1 = 0;
-  protected score2 = 0;
+  protected chips: Array<Chip>;
+  protected activePlayer: Player;
+  protected score1: number;
+  protected score2: number;
   protected score1Text: GameObjects.Text;
   protected score2Text: GameObjects.Text;
   protected winningText: GameObjects.Text;
   protected drawText: GameObjects.Text;
-  protected logic = new BitboardLogic();
+  protected logic: BitboardLogic;
   protected player1controller: PlayerController;
   protected player2controller: PlayerController;
   protected backButton: BackButton;
+  protected delayStart?: boolean;
 
   constructor(
     config: Types.Scenes.SettingsConfig,
     player1: PlayerController,
-    player2: PlayerController
+    player2: PlayerController,
+    delayStart?: boolean
   ) {
     super(config);
     this.player1controller = player1;
     this.player2controller = player2;
+    this.delayStart = delayStart;
   }
 
   preload() {
@@ -58,6 +61,13 @@ export class PlayingScene extends Scene {
   }
 
   create() {
+    this.chips = new Array<Chip>();
+    this.activePlayer = Player.One;
+    this.score1 = 0;
+    this.score2 = 0;
+    this.logic = new BitboardLogic();
+    this.player1controller.cancelPromptForMove();
+    this.player2controller.cancelPromptForMove();
     this.add.image(0, 0, 'background').setOrigin(0, 0);
     this.backButton = new BackButton(
       this,
@@ -130,7 +140,7 @@ export class PlayingScene extends Scene {
     IFrameEvents.listenForSleep(this);
     IFrameEvents.listenForWake(this);
     IFrameEvents.emitSceneCreated();
-    this.beginActivePlayerTurn();
+    if (!this.delayStart) this.beginActivePlayerTurn();
   }
 
   update(time, delta) {
