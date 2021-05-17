@@ -87,7 +87,11 @@ export class MultiplayerPlayingScene extends PlayingScene {
       this.client.onJoinedSession((opponentDisplayName) => {
         this.opponentDisplayNameText.setText(opponentDisplayName);
         this.beginActivePlayerTurn();
-        this.client.onSessionNotFound(() => alert('Session corrupted'));
+        this.client.onSessionNotFound(() => {
+          alert('Session has become corrupted.');
+          this.client.quit();
+          this.scene.switch('menu');
+        });
         this.backButton.setAction(() => {
           this.client.quit();
           this.scene.switch('menu');
@@ -110,7 +114,13 @@ export class MultiplayerPlayingScene extends PlayingScene {
     this.client.onGameRestart((thisClientStartsFirst) => {
       super.restart(() => (thisClientStartsFirst ? Player.One : Player.Two));
     });
-    this.client.onOpponentQuit(() => alert('Opponent has left'));
-    this.client.onSessionEnded(() => alert('The session has ended'));
+    this.client.onOpponentQuit(() => {
+      alert('The opponent has left.');
+      this.scene.switch('menu');
+    });
+    this.client.onSessionEnded(() => {
+      alert('The session has ended.');
+      this.scene.switch('menu');
+    });
   }
 }
