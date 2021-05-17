@@ -3,11 +3,13 @@ import { GameObjects, Scene } from 'phaser';
 export abstract class Modal {
   protected dom: GameObjects.DOMElement;
   protected clickOutListener: (event: MouseEvent) => any;
+  protected enableClickOut: boolean;
 
-  constructor(scene: Scene, x: number, y: number) {
+  constructor(scene: Scene, x: number, y: number, enableClickOut = true) {
     this.dom = scene.add.dom(x, y);
     this.dom.createFromHTML(this.getHTML());
     this.dom.visible = false;
+    this.enableClickOut = enableClickOut;
   }
 
   protected abstract getHTML(): string;
@@ -15,6 +17,7 @@ export abstract class Modal {
   show(): void {
     if (this.dom.visible) return;
     this.dom.visible = true;
+    if (!this.enableClickOut) return;
     setTimeout(() => {
       this.clickOutListener = (event: MouseEvent) => {
         if (event.target instanceof HTMLCanvasElement) {
