@@ -8,9 +8,12 @@ import { globalScale } from '../util/scale';
 import { PlayingScene } from './playing-scene';
 
 export class MultiplayerPlayingScene extends PlayingScene {
+  private readonly yourMove = 'Your move!';
+  private readonly oppMove = 'Waiting on your opponent...';
   private displayName: string;
   private displayNameText: GameObjects.Text;
   private opponentDisplayNameText: GameObjects.Text;
+  private statusText: GameObjects.Text;
   private sessionModal: SessionModal;
 
   constructor(
@@ -67,12 +70,34 @@ export class MultiplayerPlayingScene extends PlayingScene {
         color: 'white',
       },
     });
+    this.statusText = this.make.text({
+      x: globalScale(300),
+      y: globalScale(540),
+      text: '',
+      style: {
+        font: `bold ${globalScale(12)}px "Arial"`,
+        color: 'white',
+      },
+    });
+    this.statusText.setOrigin(0.5);
     this.opponentDisplayNameText.setOrigin(0.5);
     this.client.onOpponentJoin((opponentDisplayName) => {
       this.opponentDisplayNameText.setText(opponentDisplayName);
       this.sessionModal.hide();
+      this.updateStatusText();
       this.beginActivePlayerTurn();
     });
+  }
+
+  protected swapPlayers() {
+    super.swapPlayers();
+    this.updateStatusText();
+  }
+
+  private updateStatusText() {
+    this.statusText.setText(
+      this.activePlayer === Player.One ? this.yourMove : this.oppMove
+    );
   }
 
   private setupSession() {
@@ -95,6 +120,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
       this.client.joinSession(session, this.displayName);
       this.client.onJoinedSession((opponentDisplayName) => {
         this.opponentDisplayNameText.setText(opponentDisplayName);
+        this.updateStatusText();
         this.beginActivePlayerTurn();
         this.client.onSessionNotFound(() => {
           alert('Session has become corrupted.');
@@ -122,6 +148,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
     this.client.onOpponentMove((column) => super.dropChip(column));
     this.client.onGameRestart((thisClientStartsFirst) => {
       super.restart(() => (thisClientStartsFirst ? Player.One : Player.Two));
+      this.updateStatusText();
     });
     this.client.onOpponentQuit(() => {
       alert('The opponent has left.');
