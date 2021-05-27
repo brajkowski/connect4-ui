@@ -118,7 +118,7 @@ export class MultiplayerPlayingScene extends PlayingScene {
         return;
       }
       this.client.joinSession(session, this.displayName);
-      this.client.onJoinedSession((opponentDisplayName) => {
+      this.client.onSessionJoined((opponentDisplayName) => {
         this.opponentDisplayNameText.setText(opponentDisplayName);
         this.updateStatusText();
         this.beginActivePlayerTurn();
