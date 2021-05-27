@@ -5,45 +5,45 @@ export class MultiplayerModal extends Modal {
   private static readonly html: string = `
     <style>
       .modal {
-        text-align: center;
         background-color: #404040;
-        width: 1140px;
-        height: 334px;
-        box-shadow: 0px 0px 50px black;
         border-radius: 100px;
+        box-shadow: 0px 0px 50px black;
+        height: 334px;
         padding: 50px;
+        text-align: center;
+        width: 1140px;
       }
       .modal-text {
         color: white;
-        font-size: 50px;
         font-family: Arial;
+        font-size: 50px;
       }
       .modal-button {
-        width: 400px;
-        height: 125px;
-        border-radius: 25px;
         background-color: #5B5B5B;
-        color: white;
         border: none;
-        font-size: 50px;
-        font-family: Arial;
+        border-radius: 25px;
         box-shadow: 0px 0px 10px black;
+        color: white;
         cursor: pointer;
+        font-family: Arial;
+        font-size: 50px;
+        height: 125px;
         margin: 20px;
         margin-top:25px;
+        width: 400px;
       }
       .modal-button:active {
         background-color: #303030;
       }
       input {
-        width: 800px;
-        height: 125px;
-        border-radius: 25px;
         border: none;
-        font-size: 50px;
+        border-radius: 25px;
         font-family: Arial;
-        padding: 0px 25px;
+        font-size: 50px;
+        height: 125px;
         margin-top: 25px;
+        padding: 0px 25px;
+        width: 800px;
       }
     </style>
     <div class="modal">

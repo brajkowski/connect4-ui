@@ -40,8 +40,8 @@ export class Button {
         y: spritePos.y + this.textoOffsetY,
         text,
         style: {
-          font: `40px "Arial"`,
           color: 'white',
+          font: `40px "Arial"`,
         },
       })
       .setOrigin(0.5);

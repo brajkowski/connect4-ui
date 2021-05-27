@@ -56,8 +56,8 @@ export class MultiplayerPlayingScene extends PlayingScene {
       y: globalScale(582),
       text: this.displayName,
       style: {
-        font: `italic ${globalScale(10)}px "Arial"`,
         color: 'white',
+        font: `italic ${globalScale(10)}px "Arial"`,
       },
     });
     this.displayNameText.setOrigin(0.5);
@@ -66,8 +66,8 @@ export class MultiplayerPlayingScene extends PlayingScene {
       y: globalScale(582),
       text: 'Waiting for opponent to join...',
       style: {
-        font: `italic ${globalScale(10)}px "Arial"`,
         color: 'white',
+        font: `italic ${globalScale(10)}px "Arial"`,
       },
     });
     this.statusText = this.make.text({
@@ -75,8 +75,8 @@ export class MultiplayerPlayingScene extends PlayingScene {
       y: globalScale(540),
       text: '',
       style: {
-        font: `bold ${globalScale(12)}px "Arial"`,
         color: 'white',
+        font: `bold ${globalScale(12)}px "Arial"`,
       },
     });
     this.statusText.setOrigin(0.5);

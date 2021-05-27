@@ -5,24 +5,24 @@ export class SessionModal extends Modal {
   private static readonly html: string = `
     <style>
       .modal {
-        text-align: center;
         background-color: #404040;
-        width: 1140px;
-        height: 334px;
         box-shadow: 0px 0px 50px black;
         border-radius: 100px;
+        height: 334px;
         padding: 50px;
+        text-align: center;
+        width: 1140px;
       }
       .modal-text {
         color: white;
-        font-size: 50px;
         font-family: Arial;
+        font-size: 50px;
         margin: 0;
       }
       .session-code {
         color: white;
-        font-size: 80px;
         font-family: Arial;
+        font-size: 80px;
         font-weight: bold
         margin: 50px;
       }

@@ -103,8 +103,8 @@ export class PlayingScene extends Scene {
       y: globalScale(525),
       text: `${this.score1}`,
       style: {
-        font: `${globalScale(30)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(30)}px "Arial"`,
       },
     });
     this.score2Text = this.make.text({
@@ -112,8 +112,8 @@ export class PlayingScene extends Scene {
       y: globalScale(525),
       text: `${this.score2}`,
       style: {
-        font: `${globalScale(30)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(30)}px "Arial"`,
       },
     });
     this.winningText = this.make.text({
@@ -121,8 +121,8 @@ export class PlayingScene extends Scene {
       y: globalScale(35),
       text: '',
       style: {
-        font: `${globalScale(40)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(40)}px "Arial"`,
       },
     });
     this.winningText.setOrigin(0.5);
@@ -132,8 +132,8 @@ export class PlayingScene extends Scene {
       y: globalScale(10),
       text: 'Draw!',
       style: {
-        font: `${globalScale(40)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(40)}px "Arial"`,
       },
     });
     this.drawText.visible = false;
