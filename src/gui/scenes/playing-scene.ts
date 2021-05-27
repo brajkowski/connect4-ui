@@ -13,28 +13,32 @@ import { ColumnMapper } from '../util/column-mapper';
 import { globalScale } from '../util/scale';
 
 export class PlayingScene extends Scene {
-  private moveIndicator: MoveIndicator;
-  private restartButton: RestartButton;
-  private chips = new Array<Chip>();
-  private activePlayer = Player.One;
-  private score1 = 0;
-  private score2 = 0;
-  private score1Text: GameObjects.Text;
-  private score2Text: GameObjects.Text;
-  private winningText: GameObjects.Text;
-  private drawText: GameObjects.Text;
-  private logic = new BitboardLogic();
-  private player1controller: PlayerController;
-  private player2controller: PlayerController;
+  protected moveIndicator: MoveIndicator;
+  protected restartButton?: RestartButton;
+  protected chips: Array<Chip>;
+  protected activePlayer: Player;
+  protected score1: number;
+  protected score2: number;
+  protected score1Text: GameObjects.Text;
+  protected score2Text: GameObjects.Text;
+  protected winningText: GameObjects.Text;
+  protected drawText: GameObjects.Text;
+  protected logic: BitboardLogic;
+  protected player1controller: PlayerController;
+  protected player2controller: PlayerController;
+  protected backButton: BackButton;
+  protected delayStart?: boolean;
 
   constructor(
     config: Types.Scenes.SettingsConfig,
     player1: PlayerController,
-    player2: PlayerController
+    player2: PlayerController,
+    delayStart?: boolean
   ) {
     super(config);
     this.player1controller = player1;
     this.player2controller = player2;
+    this.delayStart = delayStart;
   }
 
   preload() {
@@ -48,10 +52,28 @@ export class PlayingScene extends Scene {
     BackButton.preload(this);
   }
 
+  createRestartButton() {
+    this.restartButton = new RestartButton(
+      new Math.Vector2(globalScale(276), globalScale(516)),
+      this,
+      () => this.restart(this.chooseRandomPlayer)
+    );
+  }
+
   create() {
+    this.chips = new Array<Chip>();
+    this.activePlayer = Player.One;
+    this.score1 = 0;
+    this.score2 = 0;
+    this.logic = new BitboardLogic();
+    this.player1controller.cancelPromptForMove();
+    this.player2controller.cancelPromptForMove();
     this.add.image(0, 0, 'background').setOrigin(0, 0);
-    new BackButton(this, globalScale(12.5), globalScale(12.5), () =>
-      this.scene.switch('menu')
+    this.backButton = new BackButton(
+      this,
+      globalScale(12.5),
+      globalScale(12.5),
+      () => this.scene.switch('menu')
     );
     this.add
       .image(globalScale(50), globalScale(64), 'board')
@@ -75,18 +97,14 @@ export class PlayingScene extends Scene {
       new Math.Vector2(globalScale(0), globalScale(25)),
       this
     );
-    this.restartButton = new RestartButton(
-      new Math.Vector2(globalScale(276), globalScale(516)),
-      this,
-      this.restart.bind(this)
-    );
+    this.createRestartButton();
     this.score1Text = this.make.text({
       x: globalScale(165),
       y: globalScale(525),
       text: `${this.score1}`,
       style: {
-        font: `${globalScale(30)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(30)}px "Arial"`,
       },
     });
     this.score2Text = this.make.text({
@@ -94,8 +112,8 @@ export class PlayingScene extends Scene {
       y: globalScale(525),
       text: `${this.score2}`,
       style: {
-        font: `${globalScale(30)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(30)}px "Arial"`,
       },
     });
     this.winningText = this.make.text({
@@ -103,8 +121,8 @@ export class PlayingScene extends Scene {
       y: globalScale(35),
       text: '',
       style: {
-        font: `${globalScale(40)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(40)}px "Arial"`,
       },
     });
     this.winningText.setOrigin(0.5);
@@ -114,25 +132,25 @@ export class PlayingScene extends Scene {
       y: globalScale(10),
       text: 'Draw!',
       style: {
-        font: `${globalScale(40)}px "Arial"`,
         color: 'white',
+        font: `${globalScale(40)}px "Arial"`,
       },
     });
     this.drawText.visible = false;
     IFrameEvents.listenForSleep(this);
     IFrameEvents.listenForWake(this);
     IFrameEvents.emitSceneCreated();
-    this.beginActivePlayerTurn();
+    if (!this.delayStart) this.beginActivePlayerTurn();
   }
 
   update(time, delta) {
     this.prepareMoveIndicator();
     this.chips.forEach((c) => c.update(time, delta));
     this.moveIndicator.update();
-    this.restartButton.update();
+    this.restartButton?.update();
   }
 
-  private beginActivePlayerTurn() {
+  protected beginActivePlayerTurn() {
     this.getActivePlayerController()
       .promptForMove(this.activePlayer, this.logic.createCopy(), this.input)
       .then((column) => {
@@ -145,13 +163,13 @@ export class PlayingScene extends Scene {
       .catch(noop);
   }
 
-  private getActivePlayerController(): PlayerController {
+  protected getActivePlayerController(): PlayerController {
     return this.activePlayer === Player.One
       ? this.player1controller
       : this.player2controller;
   }
 
-  private dropChip(column: number) {
+  protected dropChip(column: number) {
     const row = this.logic.placeChip(this.activePlayer, column);
     this.chips.push(new Chip(this.activePlayer, column, row, this));
     if (this.logic.didWin(this.activePlayer)) {
@@ -176,7 +194,7 @@ export class PlayingScene extends Scene {
     this.beginActivePlayerTurn();
   }
 
-  private prepareMoveIndicator() {
+  protected prepareMoveIndicator() {
     const column = ColumnMapper.getColumnFromMouseCoordinate(
       this.input.activePointer.x
     );
@@ -185,26 +203,29 @@ export class PlayingScene extends Scene {
     this.moveIndicator.valid = this.logic.canPlaceChip(column);
   }
 
-  private swapPlayers() {
+  protected swapPlayers() {
     this.activePlayer === Player.One
       ? (this.activePlayer = Player.Two)
       : (this.activePlayer = Player.One);
-    this.restartButton.triggerAnimation();
+    this.restartButton?.triggerAnimation();
   }
 
-  private restart() {
+  protected restart(chooseStartingPlayer: () => number) {
     this.winningText.visible = false;
     this.drawText.visible = false;
     this.logic.clear();
     this.chips.forEach((c) => c.destroy());
     this.chips = new Array<Chip>();
-    const random = new Math.RandomDataGenerator();
-    random.integerInRange(0, 1);
-    this.activePlayer = random.integerInRange(0, 1);
-    this.restartButton.reinitialize(this.activePlayer === Player.One);
+    this.activePlayer = chooseStartingPlayer();
+    this.restartButton?.reinitialize(this.activePlayer === Player.One);
     this.moveIndicator.setVisibility(true);
     this.player1controller.cancelPromptForMove();
     this.player2controller.cancelPromptForMove();
     this.beginActivePlayerTurn();
+  }
+
+  protected chooseRandomPlayer(): number {
+    const random = new Math.RandomDataGenerator();
+    return random.integerInRange(0, 1);
   }
 }
