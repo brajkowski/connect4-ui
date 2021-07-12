@@ -1,8 +1,7 @@
 {
-  "name": "connect-4",
+  "name": "@brajkowski/connect4-web-ui",
   "version": "1.0.0",
-  "description": "A local 2-player version of Connect 4 implemented with Phaser",
-  "private": true,
+  "description": "A 2-player (local and multiplayer) version of Connect 4 created with Phaser",
   "scripts": {
     "test": "jest",
     "start:dev": "webpack-dev-server --config webpack/dev.config.js --open",
@@ -12,7 +11,7 @@
     "build": "webpack --config webpack/prod.config.js"
   },
   "author": "Brandon Rajkowski",
-  "license": "ISC",
+  "license": "MIT",
   "jest": {
     "transform": {
       ".ts": "ts-jest"
