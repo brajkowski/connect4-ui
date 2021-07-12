@@ -1,5 +1,7 @@
 # Connect 4 UI
 
+[![Build](https://github.com/brajkowski/connect4-ui/actions/workflows/build.yml/badge.svg)](https://github.com/brajkowski/connect4-ui/actions/workflows/build.yml)
+
 A 2-player (local and multiplayer) version of Connect 4 created with [Phaser](https://phaser.io/).
 
 ## Building from Source
