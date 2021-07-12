@@ -1,7 +1,7 @@
 {
   "name": "@brajkowski/connect4-web-ui",
   "version": "1.0.0",
-  "description": "A 2-player (local and multiplayer) version of Connect 4 create with Phaser",
+  "description": "A 2-player (local and multiplayer) version of Connect 4 created with Phaser",
   "scripts": {
     "test": "jest",
     "start:dev": "webpack-dev-server --config webpack/dev.config.js --open",
