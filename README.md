@@ -1,6 +1,6 @@
 # Connect 4 UI
 
-![Example Game](./img/example_game.png)
+<img src="./img/example_game.png" alt="Example Game" width="600">
 
 [![Build](https://github.com/brajkowski/connect4-ui/actions/workflows/build.yml/badge.svg)](https://github.com/brajkowski/connect4-ui/actions/workflows/build.yml)
 
