@@ -43,6 +43,6 @@
     "@brajkowski/connect4-logic": "^1.0.5",
     "@brajkowski/connect4-multiplayer-client": "^1.0.1",
     "big-integer": "^1.6.48",
-    "express": "^4.21.0"
+    "express": "^4.21.1"
   }
 }
